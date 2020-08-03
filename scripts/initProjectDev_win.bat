@@ -39,4 +39,8 @@ call yarn link @awayfl/playerglobal
 ECHO [32m link "@awayfl/awayfl-player" module[0m
 call yarn link @awayfl/awayfl-player
 
+ECHO [32m create "poki-player" link[0m
+
+call yarn link
+
 PAUSE
