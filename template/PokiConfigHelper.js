@@ -241,8 +241,9 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 			for (let r = 0; r < resources.length; r++) {
 				let res_path = path.join(rootPath, resources[r]);
 				let res_name = path.basename(res_path);
-				let res_outputPath = outputPath + "assets/" + res_name;
-				let res_filesize = copiedResources[res_outputPath];
+				let res_outputPath = "assets/" + res_name;
+				let res_unique_outputPath = outputPath + "assets/" + res_name;
+				let res_filesize = copiedResources[res_unique_outputPath];
 				if (!res_filesize) {
 					// only need to copy if it has not yet been done
 					if (!fs.existsSync(res_path)) {
@@ -253,7 +254,7 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 					]));
 					stats = fs.statSync(res_path);
 					res_filesize = stats["size"];
-					copiedResources[res_outputPath] = res_filesize;
+					copiedResources[res_unique_outputPath] = res_filesize;
 				}
 				configForHTML.binary.push({
 					name: res_name,
@@ -267,11 +268,16 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 			for (let r = 0; r < assets.length; r++) {
 				let res_path = path.join(rootPath, assets[r]);
 
+				// extension is missing = is folder	
 				if (!fs.existsSync(res_path)) {
 					throw ("invalid filename path for asset " + res_path);
 				}
+
+				let folder = fs.lstatSync(res_path).isDirectory();
+				let name = path.basename(res_path);
+
 				plugins.push(new CopyWebPackPlugin([
-					{ from: res_path, to: outputPath + "assets" },
+					{ from: res_path, to: outputPath + "assets" + (folder ? "/" + name : "")  },
 				]));
 				
 			}
@@ -291,7 +297,7 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 			configForHTML.start = "assets/" + configForHTML.start;
 
 
-		var runtimePath = (config.split ? folderName + "/js/" : "js/") + config.entryName + ".js";
+		var runtimePath = "js/" + config.entryName + ".js";
 		configForHTML["runtime"] = runtimePath;
 
 

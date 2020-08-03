@@ -1,9 +1,10 @@
+import { ContextWebGLFlags } from "@awayjs/stage";
 import { AVMPlayer } from "@awayfl/awayfl-player";
 import { LoaderEvent } from "@awayjs/core"
-import { globalRedirectRules } from "@awayfl/playerglobal";
+import { globalRedirectRules } from "@awayfl/swf-loader";
 import { AVMEvent, AVMVERSION } from '@awayfl/swf-loader';
 import { AVM1Globals, AVM1SceneGraphFactory } from '@awayfl/avm1';
-import { BOX2D_PREFERENCE } from '@awayfl/avm2';
+import { BOX2D_PREFERENCE, PREF_BOX2D_VERSION } from '@awayfl/avm2';
 import { AVM1PokiSDK } from './AVM1PokiSDK';
 import { AVM2PokiSDK } from './AVM2PokiSDK';
 import { AVM1ButtonCustom } from './AVM1ButtonCustom';
@@ -16,7 +17,7 @@ globalRedirectRules.push(
 	},
 	{
 		test: /AGI.swf/,
-		resolve: "/assets/ads/AGI.swf",
+		resolve: "./assets/ads/AGI.swf",
 	},
 	{
 		test: "http://cdn.nitrome.com/components/NitromeAPI.pkg",
@@ -48,6 +49,14 @@ export class AVMPlayerPoki extends AVMPlayer {
 			BOX2D_PREFERENCE.version = gameConfig.box2dVersion;
 		}
 
+		if(this._gameConfig.multisample === false) {
+			ContextWebGLFlags.PREF_MULTISAMPLE = false;
+		}
+		
+		if(this._gameConfig.useWebGL1) {
+			ContextWebGLFlags.PREF_VERSION = 1;
+		}
+		
 		this.addEventListener(LoaderEvent.LOADER_COMPLETE, (event) => {
 			if (!this._gameConfig.start) {
 				if (window["pokiGameParseComplete"])
@@ -59,8 +68,21 @@ export class AVMPlayerPoki extends AVMPlayer {
 				window["pokiGameParseComplete"](() => this.play(gameConfig.skipFramesOfScene));
 		});
 
-		this.load();
 
+		// i don't know why, but when prevetn auto load from constructor then some aspp crushed
+		// i think this is problem with LOADER_COMPLETE and AVM_COMPLETE callbacks ordering + PokiSDK
+		if(gameConfig.box2DCustom) {
+			this.registerCustomBox2D(gameConfig.box2DCustom)
+		}
+
+		if(!gameConfig.preventLoad) {
+			this.load();
+		}
+	}
+
+	public registerCustomBox2D(boxInterface: any) {
+		BOX2D_PREFERENCE.custom = boxInterface;
+		BOX2D_PREFERENCE.version = PREF_BOX2D_VERSION.CUSTOM;		
 	}
 
 	protected onAVMAvailable(event: AVMEvent) {
