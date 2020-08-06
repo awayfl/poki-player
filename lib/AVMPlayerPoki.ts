@@ -26,11 +26,15 @@ globalRedirectRules.push(
 	}
 )
 
+
+AVMCrashReport.init();
+
 export class AVMPlayerPoki extends AVMPlayer {
 
 	constructor(gameConfig: any) {
 		super(gameConfig);
-		// AVMCrashReport.init(this);
+		
+		AVMCrashReport.bind(this);
 
 		if (!gameConfig.files || !gameConfig.files.length) {
 			throw ("AVMPlayerPoki: gameConfig.files must have positive length");
