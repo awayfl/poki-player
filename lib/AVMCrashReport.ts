@@ -1,6 +1,93 @@
 import { AVMPlayerPoki } from "./AVMPlayerPoki";
 
+const STYLE_TMPLATE = `
+	#report__root {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		z-index: 1000;
+		user-select: none;
+		pointer-events: none;
+	}
+	.report__btn {
+		padding: 4px;
+		height: 1.5em;
+		background: #222;
+		color: #eee;
+		text-align: center;
+		font-size: 1.5em;
+		line-height: 1.5em;
+		border-radius: 1.5em;
+		pointer-events: all;
+		box-shadow: 1px 3px 5px 2px black;
+		transition: background-color 0.5s;
+	}
+	.report__btn:hover {
+		cursor: pointer;
+		background: #444;
+	}
 
+	#report__snap:hover {
+		right: -15px;
+		color: #ffc;
+	}
+
+	#report__snap {
+		position: absolute;
+		top: 0.5em;
+		right: -30px;
+		width: 100px;
+		padding: 4px 16px 4px 4px;
+		transition: right 0.5s;
+		display: none;
+	}
+
+	#report__poppup {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		width: max(60%, 300px);
+		min-height: 40%;
+		max-height: 80%;
+		height: auto;
+		display: none;
+		flex-direction: column;
+		background: #fcc;
+		box-shadow: 1px 3px 5px 2px black;
+		border-radius: 4px;
+		justify-content: space-around;
+		align-items: center;
+		color: #222;
+		padding: 10px;
+	}
+
+	#report__poppup.show{
+		display: flex;
+	}
+
+	#report__text {
+		width: 100%;
+		min-height: 30%;
+		height: auto;
+		background: rgba(255,255,255, 0.5);
+		pointer-events: all;
+	}
+`
+
+const HTML_TEMPLATE = `
+<div id='report__snap' class = 'report__btn'>
+	<span>SNAP</span>
+</div>
+<div id='report__poppup'>
+	<h1>Report!</h1>
+	<textarea readonly = "true" id="report__text" rows='10'>error</textarea>
+	<div id = 'report__save' class = 'report__btn'>
+		SAVE REPORT
+	</div>
+</div>
+
+`
 const GL_CONST = {
 	MAX_TEXTURE_SIZE: 0x0d33,
 	MAX_VIEWPORT_DIMS: 	0x0d3a,
@@ -22,32 +109,54 @@ const original = {
 
 export class AVMCrashReport {
 	public static collectLogs = true;
-	public static logs = [];
-	public static glInfo = {};
-	public static lastCrash = null;
-	protected static player: AVMPlayerPoki;
+	public static instance: AVMCrashReport = null;
 
-	public static init() {
+	public logs = [];
+	public glInfo = {};
+	public lastCrash = null;
+	public roodtEl = null;
+	protected player: AVMPlayerPoki;
+
+	public constructor() {
 		this._attachReporters();
 		this._attachUI();
 		this._webGlInfo();
+
 		//@ts-ignore
-		window.REPORTER = AVMCrashReport;
+		window.REPORTER = this;
+	}
+
+	public static init() {
+		AVMCrashReport.instance = new AVMCrashReport();
 	}
 
 	public static bind(player) {
-		AVMCrashReport.player = player;
+		AVMCrashReport.instance.bind(player);
 	}
 
-	private static _attachUI() {
-		const b = document.querySelector("#report__snap");
+	public bind(player) {
+		this.player = player;
+	}
+
+	private _attachUI() {
+		const root = this.roodtEl = document.createElement("div");
+
+		root.setAttribute('id', "report__root");
+		root.innerHTML = HTML_TEMPLATE;
+		document.body.appendChild(root);
+
+		const s = document.createElement('style');
+		s.innerHTML = STYLE_TMPLATE;
+		document.head.appendChild(s);
+
+		const b = root.querySelector("#report__snap");
 		b.addEventListener("click", () => this._requsetSnap());
 	}
 
-	private static _requsetSnap() {
+	private _requsetSnap() {
 		console.log("[AVMCrashReporter] Generate report...");
 
-		const pop = document.querySelector("#report__poppup");
+		const pop = this.roodtEl.querySelector("#report__poppup");
 		const area = pop.querySelector("#report__text");
 		const save = pop.querySelector("#report__save");
 
@@ -55,24 +164,23 @@ export class AVMCrashReport {
 			return null;
 		}
 
-		const _logs = AVMCrashReport.logs.join("\n");
-		area.textContent = _logs;
+		area.textContent =  this.logs.join("\n");
 
 		pop.classList.toggle("show", true);
 
 		save.addEventListener("click",() => {
 			pop.classList.toggle("show", false);
 			
-			const data = AVMCrashReport.generateReport()
+			const data = this.generateReport()
 			const name = 
-				`report_${ AVMCrashReport.player.config.title}_${(new Date().toDateString())}.json`		
+				`report_${ this.player.config.title}_${(new Date().toDateString())}.json`		
 
-			AVMCrashReport.__saveFile(data, name);
+			this._saveFile(data, name);
 
 		}, {once: true})
 	}
 
-	private static __saveFile(data: string, name: string) {
+	private _saveFile(data: string, name: string) {
 
 		var blob = new Blob( [ data ], {
 			type: 'application/json'
@@ -93,29 +201,29 @@ export class AVMCrashReport {
 		link.dispatchEvent( event );
 	}
 
-	private static _attachReporters() {
-		window.onerror = AVMCrashReport._catchUnhandled;
-
-		if (this.collectLogs) {
+	private _attachReporters() {
+		window.onerror = this._catchUnhandled.bind(this);
+		const _this = this;
+		if (AVMCrashReport.collectLogs) {
 			for(let key in original) {
 				console[key] = function (...args:any[]) {
-					AVMCrashReport._trackLogs(key, ...args);
+					_this._trackLogs(key, ...args);
 					original[key].apply(console, args);
 				}
 			}
 		}
 	}
 
-	private static _trackLogs(type:string, ...args: any[]) {
+	private _trackLogs(type:string, ...args: any[]) {
 		this.logs.push("[" + type.toUpperCase() + "]: " + args.join(" "));
 	}
 
-	private static _catchUnhandled(error: string, url: string, line: number, coll, errObj: Error) {
+	private _catchUnhandled(error: string, url: string, line: number, coll, errObj: Error) {
 		if(defaultError)
 			defaultError(error, url, line);
 
-		AVMCrashReport._trackLogs("exeption", errObj.stack);
-		AVMCrashReport.lastCrash = {
+		this._trackLogs("exeption", errObj.stack);
+		this.lastCrash = {
 			error,
 			line,
 			stack: errObj.stack,
@@ -123,14 +231,14 @@ export class AVMCrashReport {
 			source: null
 		}
 
-		AVMCrashReport._requsetSnap();
+		this._requsetSnap();
 	}
 
-	public static generateReport() {
+	public generateReport() {
 		const report = {
 			date: new Date(),
 			game: this._gameInfo(),
-			device: this._deviceLog(),
+			device: this._deviceInfo(),
 			context: this.glInfo,
 			config: this.player.config,
 			crash: this.lastCrash,
@@ -140,7 +248,7 @@ export class AVMCrashReport {
 		return JSON.stringify(report);
 	}
 
-	private static _gameInfo() {
+	private _gameInfo() {
 		const player = <any>this.player;
 
 		const avm = player._avmHandler.avmVersion;
@@ -176,7 +284,7 @@ export class AVMCrashReport {
 		}
 	}
 
-	private static _webGlInfo() {
+	private _webGlInfo() {
 		const c = document.createElement('canvas');
 		let version = 2;
 		let ctx: WebGL2RenderingContext | WebGLRenderingContext = c.getContext('webgl2');
@@ -202,7 +310,7 @@ export class AVMCrashReport {
 		}
 	}
 
-	private static _deviceLog() {
+	private _deviceInfo() {
 		const store = Object.create(null);
 
 		try {
