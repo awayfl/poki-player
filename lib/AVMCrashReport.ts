@@ -173,7 +173,7 @@ export class AVMCrashReport {
 			
 			const data = this.generateReport()
 			const name = 
-				`report_${ this.player.config.title}_${(new Date().toDateString())}.json`		
+				`report_${ this.player.config.title}_${(new Date().toISOString())}.json`		
 
 			this._saveFile(data, name);
 
@@ -241,6 +241,7 @@ export class AVMCrashReport {
 			device: this._deviceInfo(),
 			context: this.glInfo,
 			config: this.player.config,
+			logs: this.logs,
 			crash: this.lastCrash,
 			snap: null // comming soon
 		};
