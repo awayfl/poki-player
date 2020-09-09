@@ -9,6 +9,7 @@ import { AVM1PokiSDK } from './AVM1PokiSDK';
 import { AVM2PokiSDK } from './AVM2PokiSDK';
 import { AVM1ButtonCustom } from './AVM1ButtonCustom';
 import { AVM1MovieClipCustom } from './AVM1MovieClipCustom';
+import { AVMCrashReport } from './AVMCrashReport';
 
 globalRedirectRules.push(
 	{
@@ -25,10 +26,15 @@ globalRedirectRules.push(
 	}
 )
 
+
+AVMCrashReport.init();
+
 export class AVMPlayerPoki extends AVMPlayer {
 
 	constructor(gameConfig: any) {
 		super(gameConfig);
+		
+		AVMCrashReport.bind(this);
 
 		if (!gameConfig.files || !gameConfig.files.length) {
 			throw ("AVMPlayerPoki: gameConfig.files must have positive length");

@@ -1,6 +1,6 @@
 {
 	"name": "poki-player",
-	"version": "0.0.2",
+	"version": "0.0.6",
 	"description": "AVM Player for poki games",
 	"main": "bundle/poki-player.umd.js",
 	"module": "dist/index.js",
@@ -20,7 +20,7 @@
 		"build": "npm run tsc:build && npm run rollup && npm run uglifyjs",
 		"copyVersionToIndex": "node ./scripts/copyVersionToIndex /index.ts && git add ./index.ts && git commit -m \"update version number in index.ts\"",
 		"version": "npm run copyVersionToIndex && npm run build",
-		"postversion": "git push && git push --tags && npm publish"
+		"postversion": "git push && git push --tags"
 	},
 	"keywords": [
 		"AwayJS",
