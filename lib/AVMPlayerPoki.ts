@@ -141,6 +141,8 @@ export class AVMPlayerPoki extends AVMPlayer {
 
 			}
 		}
+
+		super.onAVMAvailable(event);
 	}
 }
 

@@ -131,7 +131,9 @@ export class AVMCrashReport {
 	}
 
 	public static bind(player) {
-		AVMCrashReport.instance.bind(player);
+		if(AVMCrashReport.instance) {
+			AVMCrashReport.instance.bind(player);
+		}
 	}
 
 	public bind(player) {
@@ -222,7 +224,7 @@ export class AVMCrashReport {
 		if(defaultError)
 			defaultError(error, url, line);
 
-		this._trackLogs("exeption", errObj.stack);
+		this._trackLogs("exeption", errObj.stack || error);
 		this.lastCrash = {
 			error,
 			line,
