@@ -330,8 +330,27 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 
 		// code to overwrite config by URLSearchParams
 		if (config.allowURLSearchParams) {
-			jsStringForHTML += "const q = new URLSearchParams(location.search);\n";
-			jsStringForHTML += "for (let key of q.keys()){ config[key] = q.get(key);};\n";
+			jsStringForHTML += `const q = new URLSearchParams(location.search);
+			
+			for (let key of q.keys()){ 
+				let value = q.get(key);
+
+				if (value.includes("<boolean>") || value.includes("<bool>")) {
+					let valueWithoutClass = value.replace(/<boolean>/g,'').replace(/<bool>/g,'').toLowerCase();
+					if (["true", "t", "1"].includes(valueWithoutClass)) config[key] = true;
+					else if (["false", "f", "0"].includes(valueWithoutClass)) config[key] = false;
+					else console.warn("Unable to cast URLSearchParam '" + key + "'='" + valueWithoutClass + "' as boolean");
+				} else if (value.includes("<int>") || value.includes("<integer>") || value.includes("<number>")) {
+					let valueWithoutClass = value.replace(/<int>/g,'').replace(/<integer>/g,'').replace(/<number>/g,'');
+					config[key] = parseInt(valueWithoutClass, 10);
+				} else {
+					// treat this as string
+					config[key] = q.get(key);
+				}
+
+				// console.log({key, value, result: config[key]}); 
+			};
+			`;
 		}
 
 		// add cachebuster
