@@ -183,7 +183,9 @@ var Loader = (function () {
 					visibility: "hidden",
 					opacity: 0,
 				});
-				Object.assign(__splash, { backgroundImage: `url(${__config.start})` });
+				Object.assign(__splash.style, {
+					backgroundImage: `url(${__config.start})`,
+				});				
 				let onCLick = (e) => {
 					window.removeEventListener("click", onCLick);
 					Object.assign(__splash.style, {
