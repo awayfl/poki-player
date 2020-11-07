@@ -4,7 +4,10 @@ var Loader = (function () {
 		const isScript = file.path.indexOf(".js") > -1;
 
 		req.addEventListener("progress", e => {
-			const total = e.total || file.size;
+			const gzip = req.getAllResponseHeaders('content-encoding') === 'gzip';
+
+			// get from progress, then from request, and if not valid - from file
+			const total = e.total || (+req.getAllResponseHeaders('content-length')) || (file.size * (gzip ? 0.25 : 1));
 
 			if(!total) {
 				progressEvent(1);
