@@ -18,16 +18,18 @@ function Decoder(size, offset = 8) {
 	let donableCallback;
 
 	function run() {
-		decoderR.read().then(function next({done, value}) {
-			
+		decoderR.read().then(function next(state) {
+			const done = state.done;
+			const value = state.value;
+
 			if (value) {
 				buffer.set(value, offset);
-				console.debug("[Loader] Decoded chunk:", offset);
+				//console.debug("[Loader] Decoded chunk:", offset);
 
 				offset += value.length;
 			}
 
-			if (done || offset === size) {
+			if (done || offset >= size) {
 				isDone = true;
 
 				if(donableCallback) {
@@ -73,25 +75,27 @@ function Decoder(size, offset = 8) {
 }
 
 function Fetcher(url = '', progress = f => f) {
+	let id = 0;
+	let total = 0;
+	let reader;
+
 	return fetch(url)
-		.then(async (requiest) => {
+		.then((request) => {
+			total = +request.headers.get('Content-Length');
+			reader = request.body.getReader();
 
-			const stream = requiest.body;
-			const r = stream.getReader();
-			let total = +requiest.headers.get('Content-Length')
-			
+			return reader.read();
+		})
+		.then( (data) => {
+			const firstChunk = data.value; 
+
+			console.debug("[Loader] Header:", String.fromCharCode.apply(null,firstChunk.slice(0, 3).reverse()));
+
 			let offset = 0;
-			let id = 0;
-
-			const { done, value: firstChunk } = await r.read();
-			const swc = isSWC(firstChunk);
-	
-			console.log("head:", String.fromCharCode(...firstChunk.slice(0, 3)));
-
 			let buffer;
 			let decoder;
 
-			if (swc && supportDecoderApi) {
+			if (supportDecoderApi && isSWC(firstChunk)) {
 				const totalDecodedSize = outputSize(firstChunk);
 				const swcHeader = firstChunk.slice(0, 8);
 
@@ -103,26 +107,30 @@ function Fetcher(url = '', progress = f => f) {
 				buffer = decoder.buffer;
 				buffer.set(swcHeader);
 
+				// push witout header
 				decoder.write(firstChunk.slice(8));
+
 			} else {
 				buffer = new Uint8Array(total);
-
 				buffer.set(firstChunk);
 			}
+
 			offset += firstChunk.length;
 	
-			while(1) {
-				const {done, value} = await r.read();
+			// update all other chunks reqursive while !done
+			return reader.read().then( function moveNext(state) {
+				const done = state.done;
+				const value = state.value;
 
 				progress && progress(offset / total);
 
-				console.debug("[Loader] Fetched chunk:", id++, " progress:", offset / total);
+				//console.debug("[Loader] Fetched chunk:", id++, " progress:", offset / total);
 
 				if (done) {
 					if(!decoder) {
 						return buffer;
 					}else {
-						return await decoder.readAll();
+						return decoder.readAll();
 					}
 				}
 
@@ -133,7 +141,9 @@ function Fetcher(url = '', progress = f => f) {
 				}
 
 				offset += value.length;
-			}
+
+				return reader.read().then(moveNext);
+			});
 		})
 }
 
