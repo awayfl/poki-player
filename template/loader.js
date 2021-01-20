@@ -75,9 +75,11 @@ function Decoder(size, offset = 8) {
 }
 
 function Fetcher(url = '', progress = f => f) {
-	let id = 0;
 	let total = 0;
 	let reader;
+	let chunks = [];
+
+	progress && progress(0);
 
 	return fetch(url)
 		.then((request) => {
@@ -91,8 +93,7 @@ function Fetcher(url = '', progress = f => f) {
 
 			console.debug("[Loader] Header:", String.fromCharCode.apply(null,firstChunk.slice(0, 3).reverse()));
 
-			let offset = 0;
-			let buffer;
+			let loaded = 0;
 			let decoder;
 
 			if (supportDecoderApi && isSWC(firstChunk)) {
@@ -104,30 +105,39 @@ function Fetcher(url = '', progress = f => f) {
 				console.debug("[Loader] SWC size:", outputSize(firstChunk));
 
 				decoder = Decoder(totalDecodedSize, 8);
-				buffer = decoder.buffer;
-				buffer.set(swcHeader);
+				decoder.buffer.set(swcHeader);
 
 				// push witout header
 				decoder.write(firstChunk.slice(8));
 
 			} else {
-				buffer = new Uint8Array(total);
-				buffer.set(firstChunk);
+				chunks.push(firstChunk);
 			}
 
-			offset += firstChunk.length;
+			loaded += firstChunk.length;
 	
+			progress && progress( Math.min(1, loaded / total));
+
 			// update all other chunks reqursive while !done
 			return reader.read().then( function moveNext(state) {
 				const done = state.done;
 				const value = state.value;
 
-				progress && progress(offset / total);
-
 				//console.debug("[Loader] Fetched chunk:", id++, " progress:", offset / total);
+
+				loaded += value.length;
+				progress && progress( Math.min(1, loaded / total));
 
 				if (done) {
 					if(!decoder) {
+						let buffer = new Uint8Array(loaded);
+						let offset = 0;
+						
+						chunks.forEach((e) => {
+							buffer.set(e, offset);
+							offset += e.length;
+						});
+
 						return buffer;
 					}else {
 						return decoder.readAll();
@@ -135,12 +145,10 @@ function Fetcher(url = '', progress = f => f) {
 				}
 
 				if (!decoder) {
-					buffer.set(value, offset);
+					chunks.push(value);
 				} else {
 					decoder.write(value);
 				}
-
-				offset += value.length;
 
 				return reader.read().then(moveNext);
 			});
