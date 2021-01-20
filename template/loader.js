@@ -120,15 +120,8 @@ function Fetcher(url = '', progress = f => f) {
 
 			// update all other chunks reqursive while !done
 			return reader.read().then( function moveNext(state) {
-				const done = state.done;
-				const value = state.value;
 
-				//console.debug("[Loader] Fetched chunk:", id++, " progress:", offset / total);
-
-				loaded += value.length;
-				progress && progress( Math.min(1, loaded / total));
-
-				if (done) {
+				if (state.done) {
 					if(!decoder) {
 						let buffer = new Uint8Array(loaded);
 						let offset = 0;
@@ -143,6 +136,11 @@ function Fetcher(url = '', progress = f => f) {
 						return decoder.readAll();
 					}
 				}
+
+				const value = state.value;
+
+				loaded += value.length;
+				progress && progress( Math.min(1, loaded / total));
 
 				if (!decoder) {
 					chunks.push(value);
