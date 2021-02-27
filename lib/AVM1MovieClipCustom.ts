@@ -48,9 +48,11 @@ export class AVM1MovieClipCustom extends AVM1MovieClip {
 	}
 
 	private findChildWithSymbolIDs(obj:DisplayObjectContainer) {
-		var childNum:number = obj._children.length;
+		//@ts-ignore
+		const childNum:number = obj._children.length;
 		for (var i = 0; i < childNum; i++) {
-			var child=obj._children[i];
+			//@ts-ignore
+			const child = obj._children[i];
 			if(child && (<any>child).symbolID && AVM1MovieClipCustom.retryButtonIDS[(<any>child).symbolID]){
 				return true;
 			}

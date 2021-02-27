@@ -107,6 +107,19 @@ const original = {
 	info: console.info,
 };
 
+function attachZip() {
+	const s = document.createElement('script');
+	s.async = true;
+	s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js';
+	s.crossOrigin = 'anonymous';
+
+	document.body.appendChild(s);
+
+	return new Promise((e) => s.onload = e);
+}
+
+let ZIP = null;
+
 export class AVMCrashReport {
 	public static collectLogs = true;
 	public static instance: AVMCrashReport = null;
@@ -122,6 +135,7 @@ export class AVMCrashReport {
 		this._attachUI();
 		this._webGlInfo();
 
+		attachZip().then(e => ZIP = self['JSZip']);
 		//@ts-ignore
 		window.REPORTER = this;
 	}
@@ -130,13 +144,13 @@ export class AVMCrashReport {
 		AVMCrashReport.instance = new AVMCrashReport();
 	}
 
-	public static bind(player) {
+	public static bind(player: any) {
 		if(AVMCrashReport.instance) {
 			AVMCrashReport.instance.bind(player);
 		}
 	}
 
-	public bind(player) {
+	public bind(player: any) {
 		this.player = player;
 	}
 
@@ -175,19 +189,47 @@ export class AVMCrashReport {
 			
 			const data = this.generateReport()
 			const name = 
-				`report_${ this.player.config.title}_${(new Date().toISOString())}.json`		
+				`report_${ this.player.config.title}_${(new Date().toISOString())}`		
 
 			this._saveFile(data, name);
 
 		}, {once: true})
 	}
 
-	private _saveFile(data: string, name: string) {
+	private _saveFile(data: any, name: string) {
 
-		var blob = new Blob( [ data ], {
-			type: 'application/json'
-		});
+		if (!ZIP) {
+			// remove to save size
+			data.snap = null;
+			this._trigLoad(
+				new Blob( [ JSON.stringify (data, null, 2) ], {type: 'application/json'} ),
+				name + '.jzon'
+			);
 
+		} else {
+			const snap: HTMLCanvasElement = data.snap;
+
+			if (snap) {
+				data.snap = name + '.png';
+			}
+
+			const zip = new ZIP();
+
+			zip.file(`${name}.json`, JSON.stringify(data, null, 2));
+			
+			if (snap) {
+				zip.file(data.snap, snap.toDataURL().replace('data:image/png;base64,', ''), {base64: true});
+			}
+
+			zip.generateAsync({ type:"blob" })
+				.then((content: Blob) => {
+					// see FileSaver.js
+					this._trigLoad(content, name + '.zip');
+				});
+		}
+	}
+
+	private _trigLoad(blob, name) {
 		const url = URL.createObjectURL( blob );
 		const link = document.createElement( 'a' );
 		link.setAttribute( 'href', url );
@@ -224,11 +266,11 @@ export class AVMCrashReport {
 		if(defaultError)
 			defaultError(error, url, line);
 
-		this._trackLogs("exeption", errObj.stack || error);
+		this._trackLogs("exeption", errObj?.stack || error);
 		this.lastCrash = {
 			error,
 			line,
-			stack: errObj.stack,
+			stack: errObj?.stack,
 			url,
 			source: null
 		}
@@ -237,7 +279,7 @@ export class AVMCrashReport {
 	}
 
 	public generateReport() {
-		const report = {
+		const data = {
 			date: new Date(),
 			game: this._gameInfo(),
 			device: this._deviceInfo(),
@@ -248,7 +290,7 @@ export class AVMCrashReport {
 			snap: null // comming soon
 		};
 
-		return JSON.stringify(report);
+		return data;
 	}
 
 	private _gameInfo() {
@@ -314,15 +356,23 @@ export class AVMCrashReport {
 	}
 
 	private _deviceInfo() {
-		const store = Object.create(null);
+		let store = Object.create(null);
 
-		try {
-			const l = localStorage.length;
-			for(let i = 0; i < l; i ++) {
-				const k = localStorage.key(i);
-				store[k] = localStorage.getItem(k);
+		if (self['_AWAY_DEBUG_STORAGE']) {
+			try {
+				store = self['_AWAY_DEBUG_STORAGE'].decodedData();
+			} catch (e) {
+				// 
 			}
-		} catch(e) {}
+		} else {
+			try {
+				const l = localStorage.length;
+				for(let i = 0; i < l; i ++) {
+					const k = localStorage.key(i);
+					store[k] = localStorage.getItem(k);
+				}
+			} catch(e) {}
+		}
 
 		return {
 			agent: navigator.userAgent,
@@ -332,6 +382,7 @@ export class AVMCrashReport {
 				dpi: window.devicePixelRatio
 			},
 			store,
+			memory: performance['memory']
 		}
 	}
 }

@@ -11,7 +11,7 @@
 		"rimraf": "rimraf",
 		"rollup": "rollup -c",
 		"uglifyjs": "uglifyjs ./bundle/poki-player.umd.js -o ./bundle/poki-player.umd.min.js --in-source-map ./bundle/poki-player.umd.js.map --source-map --output ./bundle/poki-player.umd.min.js.map --mangle",
-		"tsc": "tsc --lib ES2015.Symbol,DOM,ScriptHost,ES5,ES2015.Iterable",
+		"tsc": "tsc",
 		"tsc:build": "npm run tsc || exit 0",
 		"clean": "npm cache clean && npm run rimraf -- node_modules dist bundle",
 		"clean:dist": "npm run rimraf -- dist bundle",
