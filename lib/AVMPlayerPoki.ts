@@ -4,7 +4,7 @@ import { LoaderEvent } from "@awayjs/core"
 import { globalRedirectRules } from "@awayfl/swf-loader";
 import { AVMEvent, AVMVERSION } from '@awayfl/swf-loader';
 import { AVM1Globals, AVM1SceneGraphFactory } from '@awayfl/avm1';
-import { BOX2D_PREFERENCE, PREF_BOX2D_VERSION } from '@awayfl/avm2';
+import { extClasses } from '@awayfl/avm2';
 import { AVM1PokiSDK } from './AVM1PokiSDK';
 import { AVM2PokiSDK } from './AVM2PokiSDK';
 import { AVM1ButtonCustom } from './AVM1ButtonCustom';
@@ -51,8 +51,8 @@ export class AVMPlayerPoki extends AVMPlayer {
 			globalRedirectRules.push.apply(globalRedirectRules, this._gameConfig.redirects);
 		}
 
-		if(this._gameConfig.box2dVersion) {
-			BOX2D_PREFERENCE.version = gameConfig.box2dVersion;
+		if(this._gameConfig.externalLib) {
+			extClasses.lib = gameConfig.externalLib;
 		}
 
 		if(this._gameConfig.multisample === false) {
@@ -77,18 +77,9 @@ export class AVMPlayerPoki extends AVMPlayer {
 
 		// i don't know why, but when prevetn auto load from constructor then some aspp crushed
 		// i think this is problem with LOADER_COMPLETE and AVM_COMPLETE callbacks ordering + PokiSDK
-		if(gameConfig.box2DCustom) {
-			this.registerCustomBox2D(gameConfig.box2DCustom)
-		}
-
 		if(!gameConfig.preventLoad) {
 			this.load();
 		}
-	}
-
-	public registerCustomBox2D(boxInterface: any) {
-		BOX2D_PREFERENCE.custom = boxInterface;
-		BOX2D_PREFERENCE.version = PREF_BOX2D_VERSION.CUSTOM;		
 	}
 
 	protected onAVMAvailable(event: AVMEvent) {

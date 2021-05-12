@@ -54,7 +54,6 @@ module.exports = {
 		rect: [0.25, 0.65, 0.5, 0.03], // values are percentage of width / height
 	},
 
-	rt_box2dVersion: 'none', // box2d version: none, legacy, new, custom (external implementation)
 	// list of file-configs. 
 	// each file-config is a object that must provide:
 	//	- rt_title 
