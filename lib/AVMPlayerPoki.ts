@@ -23,6 +23,10 @@ globalRedirectRules.push(
 	{
 		test: "http://cdn.nitrome.com/components/NitromeAPI.pkg",
 		resolve: "./assets/NitromeAPI.pkg"
+	},
+	{
+		test: /http:/,
+		resolve: (url) => url.replace('http://', 'https://')
 	}
 )
 
