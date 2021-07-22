@@ -68,29 +68,21 @@ module.exports = (
 			filename: 'js/[name].js'
 		},
 		resolve: {
-			alias: {
-				//uncomment aliases for recompiling libs
-				// "tslib": path.join(rootPath, "node_modules", "tslib", "tslib.es6.js"),
-				// "@awayjs/core": path.join(rootPath, "node_modules", "@awayjs/core", "bundle", "awayjs-core.umd.js"),
-				// "@awayjs/graphics": path.join(rootPath, "node_modules", "@awayjs/graphics", "bundle", "awayjs-graphics.umd.js"),
-				// "@awayjs/scene": path.join(rootPath, "node_modules", "@awayjs/scene", "bundle", "awayjs-scene.umd.js"),
-				// "@awayjs/stage": path.join(rootPath, "node_modules", "@awayjs/stage", "bundle", "awayjs-stage.umd.js"),
-				// "@awayjs/renderer": path.join(rootPath, "node_modules", "@awayjs/renderer", "bundle", "awayjs-renderer.umd.js"),
-				// "@awayjs/view": path.join(rootPath, "node_modules", "@awayjs/view", "bundle", "awayjs-view.umd.js"),
-				// "@awayjs/materials": path.join(rootPath, "node_modules", "@awayjs/materials", "bundle", "awayjs-materials.umd.js"),
-				// "@awayjs/swf-viewer": path.join(rootPath, "node_modules", "@awayjs/swf-viewer", "bundle", "awayjs-swf-viewer.umd.js"),
-				//"opentype.js": path.join(rootPath, "node_modules", "opentype.js", "dist", "opentype.js")
-			},
+			alias: {},
 			// Add `.ts` and `.tsx` as a resolvable extension.
 			extensions: ['.webpack.js', '.web.js', '.js', '.ts', '.tsx']
 		},
 		module: {
 			rules: [
-				// all files with a `.ts` or `.tsx` extension will be handled by `awesome-typescript-loader`
-				{ test: /\.ts(x?)/, exclude: /node_modules/, loader: TSLoader, options: { experimentalWatchApi: true} },
-
-				// all files with a `.js` or `.jsx` extension will be handled by `source-map-loader`
-				//{ test: /\.js(x?)/, loader: require.resolve('source-map-loader') }
+				{
+					test: /\.ts(x?)/,
+					exclude: /node_modules/,
+					loader: TSLoader,
+					options: {
+						experimentalWatchApi: true,
+						transpileOnly: true
+					}
+				},
 			]
 		},
 		plugins: plugins,
@@ -112,8 +104,8 @@ module.exports = (
 
 	const dev = {
 		mode: "development",// wp4
-		devtool: 'source-map',
-		//devtool: 'cheap-module-eval-source-map',//use this option for recompiling libs
+		//devtool: 'source-map',
+		devtool: 'cheap-module-eval-source-map',//use this option for recompiling libs
 		devServer: {
 			contentBase: path.join(process.cwd(), "src"),
 			inline: true,
