@@ -98,8 +98,6 @@ module.exports = (
 		devServer: {
 			progress: true, // wp4
 		},
-
-
 	}
 
 	const dev = {
@@ -199,16 +197,31 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 
 		swfPath = path.join(rootPath, "src", "assets", configForHTML.filename + ".swf");
 		if (!fs.existsSync(swfPath)) {
-			throw ("invalid filename path for fileconfig " + configForHTML.filename);
+			throw new Error("invalid filename path for fileconfig " + configForHTML.filename);
 		}
 		stats = fs.statSync(swfPath);
 		filesize = stats["size"];
 		if (!fs.existsSync(path.join(rootPath, "src", "assets", configForHTML.splash))) {
-			throw ("invalid splashscreen path for fileconfig " + configForHTML.splash);
+			throw new Error ("invalid splashscreen path for fileconfig " + configForHTML.splash);
 		}
+
 		plugins.push(new CopyWebPackPlugin([
 			{ from: swfPath, to: outputPath + "assets" },
 		]));
+
+		if (configForHTML.filename.indexOf('_sdk') > 0) {
+			var filenameNoSDK = configForHTML.filename.replace('_sdk', '');
+			var noSdkPath = path.join(rootPath, "src", "assets", filenameNoSDK + ".swf");
+
+			if (fs.existsSync(noSdkPath)) {
+				plugins.push(new CopyWebPackPlugin([
+					{ from: noSdkPath, to: outputPath + "assets" },
+				]));
+
+				configForHTML.filenameNoSdk = filenameNoSDK;
+			}
+		}
+
 		plugins.push(new CopyWebPackPlugin([
 			{ from: path.join(rootPath, "src", "assets", configForHTML.splash), to: outputPath + "assets" },
 		]));
@@ -239,7 +252,7 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 				if (!res_filesize) {
 					// only need to copy if it has not yet been done
 					if (!fs.existsSync(res_path)) {
-						throw ("invalid filename path for resource " + res_path);
+						throw new Error ("invalid filename path for resource " + res_path);
 					}
 					plugins.push(new CopyWebPackPlugin([
 						{ from: res_path, to: outputPath + "assets" },
@@ -262,7 +275,7 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 
 				// extension is missing = is folder	
 				if (!fs.existsSync(res_path)) {
-					throw ("invalid filename path for asset " + res_path);
+					throw new Error("invalid filename path for asset " + res_path);
 				}
 
 				let folder = fs.lstatSync(res_path).isDirectory();
@@ -342,6 +355,12 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 
 				// console.log({key, value, result: config[key]}); 
 			};
+			
+			if (config.noSdk && config.filenameNoSdk) {
+				let target = config.binary
+					.filter(e => e.resourceType === 'GAME')[0];
+				target.path = 'assets/' + config.filenameNoSdk + '.swf';
+			}
 			`;
 		}
 
@@ -356,7 +375,8 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 		var htmlOutputPath = (config.split ? folderName + "/" : "") + (config.split ? "index.html" : folderName + ".html");
 		gameURLS[fileConfig.rt_filename] = {
 			path: htmlOutputPath,
-			name: configForHTML.title
+			name: configForHTML.title,
+			noSdk: !!configForHTML.filenameNoSdk && config.allowURLSearchParams
 		};
 
 		var htmlSourcePath = getConfigProp(fileConfig, config, "gameTemplate");

@@ -76,8 +76,17 @@
 	<div id="examples">
 		<h1><%= htmlWebpackPlugin.options.title %></h1>
 		<% for (var game in htmlWebpackPlugin.options.games) {  %>
-		<a href="<%= htmlWebpackPlugin.options.baseHref %><%= htmlWebpackPlugin.options.games[game].path %>"
-			class="" title="<%= htmlWebpackPlugin.options.games[game].name %>"><%= htmlWebpackPlugin.options.games[game].name %></br></a>
+			<a href="<%= htmlWebpackPlugin.options.baseHref %><%= htmlWebpackPlugin.options.games[game].path %>"
+				class="" title="<%= htmlWebpackPlugin.options.games[game].name %>">
+				<%= htmlWebpackPlugin.options.games[game].name %>
+			</a>
+			<% if (htmlWebpackPlugin.options.games[game].noSdk) { %>
+				<a href="<%= htmlWebpackPlugin.options.baseHref %><%= htmlWebpackPlugin.options.games[game].path%>?noSdk=1"
+				   class="" title="<%= htmlWebpackPlugin.options.games[game].name %>">
+					<small>noSDK</small>
+				</a>
+			<% } %>
+		</br>
 		<% } %>
 	</div>
 
