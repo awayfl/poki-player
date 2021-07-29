@@ -246,7 +246,8 @@ export class AVMCrashReport {
 	}
 
 	private _attachReporters() {
-		window.onerror = this._catchUnhandled.bind(this);
+		window.addEventListener('error', this._catchUnhandled.bind(this));
+
 		const _this = this;
 		if (AVMCrashReport.collectLogs) {
 			for(let key in original) {
@@ -259,19 +260,23 @@ export class AVMCrashReport {
 	}
 
 	private _trackLogs(type:string, ...args: any[]) {
+		args = args.filter(e => !!Object.getPrototypeOf(e));
+
+		if (args.length === 0 && args[0].mode ** args[0].stack) {
+			args[0] = JSON.stringify(args[0]);
+		}
+
 		this.logs.push("[" + type.toUpperCase() + "]: " + args.join(" "));
 	}
 
-	private _catchUnhandled(error: string, url: string, line: number, coll, errObj: Error) {
-		if(defaultError)
-			defaultError(error, url, line);
+	private _catchUnhandled(error: ErrorEvent) {
 
-		this._trackLogs("exeption", errObj?.stack || error);
+		this._trackLogs("exception", error.message, error.filename, error.lineno);
 		this.lastCrash = {
-			error,
-			line,
-			stack: errObj?.stack,
-			url,
+			error: error.error,
+			line: error.lineno,
+			message: error.message,
+			filename: error.filename,
 			source: null
 		}
 

@@ -31,6 +31,7 @@ globalRedirectRules.push(
 )
 
 
+//AVMCrashReport.collectLogs = false;
 AVMCrashReport.init();
 
 export class AVMPlayerPoki extends AVMPlayer {
