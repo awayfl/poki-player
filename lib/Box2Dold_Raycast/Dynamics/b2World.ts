@@ -1225,7 +1225,7 @@ export class b2World {
 	public m_raycastUserData:any;
 	public m_raycastSegment:b2Segment;
 	public m_raycastNormal:b2Vec2 = new b2Vec2();
-	public RaycastSortKey(shape:b2Shape){
+	public RaycastSortKey = (shape:b2Shape) => {
 		if(this.m_contactFilter && !this.m_contactFilter.RayCollide(this.m_raycastUserData,shape))
 			return -1;
 
@@ -1237,7 +1237,7 @@ export class b2World {
 		return lambda[0];
 	}
 
-	public RaycastSortKey2(shape:b2Shape) {
+	public RaycastSortKey2 = (shape:b2Shape) => {
 		if(this.m_contactFilter && !this.m_contactFilter.RayCollide(this.m_raycastUserData,shape))
 			return -1;
 
