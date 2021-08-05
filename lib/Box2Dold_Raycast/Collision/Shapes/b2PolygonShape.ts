@@ -61,7 +61,8 @@ export class b2PolygonShape extends b2Shape {
 		lambda: number[], // float ptr
 		normal: b2Vec2, // ptr
 		segment: b2Segment,
-		maxLambda: number): boolean {
+		maxLambda: number
+	): number {
 		let lower: number = 0.0;
 		let upper: number = maxLambda;
 
@@ -106,19 +107,26 @@ export class b2PolygonShape extends b2Shape {
 			// Since denominator < 0, we have to flip the inequality:
 			// lower < numerator / denominator <==> denominator * lower > numerator.
 
-			if (denominator < 0.0 && numerator < lower * denominator) {
-				// Increase lower.
-				// The segment enters this half-space.
-				lower = numerator / denominator;
-				index = i;
-			} else if (denominator > 0.0 && numerator < upper * denominator) {
-				// Decrease upper.
-				// The segment exits this half-space.
-				upper = numerator / denominator;
-			}
+			if(denominator == 0.0) {
+				if(numerator < 0.0)
+				{
+					return b2Shape.e_missCollide;
+				}
+			} else {
+				if (denominator < 0.0 && numerator < lower * denominator) {
+					// Increase lower.
+					// The segment enters this half-space.
+					lower = numerator / denominator;
+					index = i;
+				} else if (denominator > 0.0 && numerator < upper * denominator) {
+					// Decrease upper.
+					// The segment exits this half-space.
+					upper = numerator / denominator;
+				}
 
-			if (upper < lower) {
-				return false;
+				if (upper < lower) {
+					return b2Shape.e_missCollide;
+				}
 			}
 		}
 
@@ -132,10 +140,11 @@ export class b2PolygonShape extends b2Shape {
 			tVec = this.m_normals[index];
 			normal.x = (tMat.col1.x * tVec.x + tMat.col2.x * tVec.y);
 			normal.y = (tMat.col1.y * tVec.x + tMat.col2.y * tVec.y);
-			return true;
+			return b2Shape.e_hitCollide;
 		}
 
-		return false;
+		lambda[0] = 0;
+		return b2Shape.e_startsInsideCollide;
 	}
 
 	/// @see b2Shape::ComputeAABB

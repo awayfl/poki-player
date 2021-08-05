@@ -23,6 +23,7 @@ export class b2Vec2 {
 	__fast__ = true;
 
 	constructor(x_: number = 0, y_: number = 0) {this.x = x_; this.y = y_;}
+	public toString():String { return "(" + this.x + "," + this.y + ")"; }
 
 	public SetZero(): void { this.x = 0.0; this.y = 0.0; }
 	public Set(x_: number = 0, y_: number = 0): void {this.x = x_; this.y = y_;}

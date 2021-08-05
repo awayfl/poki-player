@@ -498,11 +498,16 @@ export class b2World {
 		this.m_raycastUserData = userData;
 
 		var count = 0;
-		if(solidShapes)
-			count = this.m_broadPhase.QuerySegment(segment, results, maxCount, RaycastSortKey);
-		else
-			count = this.m_broadPhase.QuerySegment(segment, results, maxCount, RaycastSortKey2);
+		if(solidShapes) {
+			count = this.m_broadPhase.QuerySegment(segment, results, maxCount, this.RaycastSortKey);
+		} else {
+			count = this.m_broadPhase.QuerySegment(segment, results, maxCount, this.RaycastSortKey2);
+		}
 
+		// ASArray
+		if (typeof (shapes['traits']) !== 'undefined') {
+			shapes = shapes['value'];
+		}
 
 		for (var i = 0; i < count; ++i)
 		{
@@ -1213,6 +1218,35 @@ export class b2World {
 				this.m_debugDraw.DrawXForm(xf);
 			}
 		}
+	}
+
+
+
+	public m_raycastUserData:any;
+	public m_raycastSegment:b2Segment;
+	public m_raycastNormal:b2Vec2 = new b2Vec2();
+	public RaycastSortKey(shape:b2Shape){
+		if(this.m_contactFilter && !this.m_contactFilter.RayCollide(this.m_raycastUserData,shape))
+			return -1;
+
+		var body:b2Body = shape.GetBody();
+		var xf:b2XForm = body.GetXForm();
+		var lambda = [0];
+		if(shape.TestSegment(xf, lambda, this.m_raycastNormal, this.m_raycastSegment, 1) == b2Shape.e_missCollide)
+			return -1;
+		return lambda[0];
+	}
+
+	public RaycastSortKey2(shape:b2Shape) {
+		if(this.m_contactFilter && !this.m_contactFilter.RayCollide(this.m_raycastUserData,shape))
+			return -1;
+
+		var body:b2Body = shape.GetBody();
+		var xf:b2XForm = body.GetXForm();
+		var lambda = [0];
+		if(shape.TestSegment(xf, lambda, this.m_raycastNormal, this.m_raycastSegment, 1) != b2Shape.e_hitCollide)
+			return -1;
+		return lambda[0];
 	}
 
 	public m_blockAllocator: any;

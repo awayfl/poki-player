@@ -209,6 +209,9 @@ export class b2Body {
 		const massData: b2MassData = b2Body.s_massData;
 		for (s = this.m_shapeList; s; s = s.m_next) {
 			s.ComputeMass(massData);
+			if(massData.mass < 1e-10)
+				continue; // CHRIS EDIT: if mass is 0, center gets set to NaN
+
 			this.m_mass += massData.mass;
 			//center += massData.mass * massData.center;
 			centerX += massData.mass * massData.center.x;
@@ -484,7 +487,7 @@ export class b2Body {
 	public GetLinearVelocityFromWorldPoint(worldPoint: b2Vec2): b2Vec2 {
 		//return          this.m_linearVelocity   + b2Cross(this.m_angularVelocity,   worldPoint   - this.m_sweep.c);
 		return new b2Vec2(this.m_linearVelocity.x +         this.m_angularVelocity * (worldPoint.y - this.m_sweep.c.y),
-		                  this.m_linearVelocity.x -         this.m_angularVelocity * (worldPoint.x - this.m_sweep.c.x));
+		                  this.m_linearVelocity.y -         this.m_angularVelocity * (worldPoint.x - this.m_sweep.c.x));
 	}
 
 	/// Get the world velocity of a local point.
@@ -498,7 +501,7 @@ export class b2Body {
 		worldPoint.x += this.m_xf.position.x;
 		worldPoint.y += this.m_xf.position.y;
 		return new b2Vec2(this.m_linearVelocity.x +         this.m_angularVelocity * (worldPoint.y - this.m_sweep.c.y),
-		                  this.m_linearVelocity.x -         this.m_angularVelocity * (worldPoint.x - this.m_sweep.c.x));
+		                  this.m_linearVelocity.y -         this.m_angularVelocity * (worldPoint.x - this.m_sweep.c.x));
 	}
 
 	/// Is this body treated like a bullet for continuous collision detection?

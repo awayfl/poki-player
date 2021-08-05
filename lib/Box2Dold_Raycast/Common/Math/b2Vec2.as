@@ -28,6 +28,8 @@ public class b2Vec2
 {
 	public function b2Vec2(x_:Number=0, y_:Number=0) : void {x=x_; y=y_;};
 
+	public function toString():String { return "(" + x + "," + y + ")"; }
+
 	public function SetZero() : void { x = 0.0; y = 0.0; }
 	public function Set(x_:Number=0, y_:Number=0) : void {x=x_; y=y_;};
 	public function SetV(v:b2Vec2) : void {x=v.x; y=v.y;};

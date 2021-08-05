@@ -96,7 +96,7 @@ export class b2Shape {
 		lambda: any[], // float pointer
 		normal: b2Vec2, // pointer
 		segment: b2Segment,
-		maxLambda: number): boolean {return false;}
+		maxLambda: number): number {return b2Shape.e_missCollide;}
 
 	/// Given a transform, compute the associated axis aligned bounding box for this shape.
 	/// @param aabb returns the axis aligned box.
@@ -274,6 +274,10 @@ export class b2Shape {
 	public static readonly e_circleShape: number /** int */ = 	0;
 	public static readonly e_polygonShape: number /** int */ = 	1;
 	public static readonly e_shapeTypeCount: number /** int */ = 	2;
+	/// Possible return values for TestSegment
+	public static readonly e_hitCollide: number /** int */ = 1;
+	public static readonly e_missCollide: number /** int */ = 0;
+	public static readonly e_startsInsideCollide: number /** int */ = -1;
 	//};
 
 }

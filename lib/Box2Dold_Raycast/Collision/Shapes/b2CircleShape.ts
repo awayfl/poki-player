@@ -44,11 +44,12 @@ export class b2CircleShape extends b2Shape {
 		lambda: number[], // float pointer
 		normal: b2Vec2, // pointer
 		segment: b2Segment,
-		maxLambda: number): boolean {
+		maxLambda: number
+	): number {
 		//b2Vec2 position = transform.position + b2Mul(transform.R, m_localPosition);
 		const tMat: b2Mat22 = transform.R;
 		const positionX: number = transform.position.x + (tMat.col1.x * this.m_localPosition.x + tMat.col2.x * this.m_localPosition.y);
-		const positionY: number = transform.position.x + (tMat.col1.y * this.m_localPosition.x + tMat.col2.y * this.m_localPosition.y);
+		const positionY: number = transform.position.y + (tMat.col1.y * this.m_localPosition.x + tMat.col2.y * this.m_localPosition.y);
 
 		//b2Vec2 s = segment.p1 - position;
 		const sX: number = segment.p1.x - positionX;
@@ -58,7 +59,8 @@ export class b2CircleShape extends b2Shape {
 
 		// Does the segment start inside the circle?
 		if (b < 0.0) {
-			return false;
+			lambda[0] = 0;
+			return b2Shape.e_startsInsideCollide;
 		}
 
 		// Solve quadratic equation.
@@ -73,7 +75,7 @@ export class b2CircleShape extends b2Shape {
 
 		// Check for negative discriminant and short segment.
 		if (sigma < 0.0 || rr < Number.MIN_VALUE) {
-			return false;
+			return b2Shape.e_missCollide;
 		}
 
 		// Find the point of intersection of the line with the circle.
@@ -88,10 +90,10 @@ export class b2CircleShape extends b2Shape {
 			normal.x = sX + a * rX;
 			normal.y = sY + a * rY;
 			normal.Normalize();
-			return true;
+			return b2Shape.e_hitCollide;
 		}
 
-		return false;
+		return b2Shape.e_missCollide;
 	}
 
 	/// @see b2Shape::ComputeAABB

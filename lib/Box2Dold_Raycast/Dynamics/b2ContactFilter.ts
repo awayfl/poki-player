@@ -33,10 +33,20 @@ export class b2ContactFilter {
 			return filter1.groupIndex > 0;
 		}
 
-		const collide: boolean = (filter1.maskBits & filter2.categoryBits) != 0 && (filter1.categoryBits & filter2.maskBits) != 0;
-		return collide;
+		return (filter1.maskBits & filter2.categoryBits) != 0 && (filter1.categoryBits & filter2.maskBits) != 0;
 	}
 
-	public static b2_defaultFilter: b2ContactFilter = new b2ContactFilter();
+	/// Return true if the given shape should be considered for ray intersection
+	public  RayCollide(userData:any, shape:b2Shape) : Boolean{
+		//By default, cast userData as a shape, and then collide if the shapes would collide
+		if(!userData || !(userData instanceof b2Shape))
+			return true;
+
+		return this.ShouldCollide(userData as b2Shape,shape);
+	}
+
+
+
+public static b2_defaultFilter: b2ContactFilter = new b2ContactFilter();
 
 }

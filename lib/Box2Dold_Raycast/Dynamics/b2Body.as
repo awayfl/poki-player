@@ -209,6 +209,7 @@ public class b2Body
 		for (s = m_shapeList; s; s = s.m_next)
 		{
 			s.ComputeMass(massData);
+			if(massData.mass < 1e-10) continue; // CHRIS EDIT: if mass is 0, center gets set to NaN
 			m_mass += massData.mass;
 			//center += massData.mass * massData.center;
 			centerX += massData.mass * massData.center.x;
@@ -504,7 +505,7 @@ public class b2Body
 	{
 		//return          m_linearVelocity   + b2Cross(m_angularVelocity,   worldPoint   - m_sweep.c);
 		return new b2Vec2(m_linearVelocity.x +         m_angularVelocity * (worldPoint.y - m_sweep.c.y), 
-		                  m_linearVelocity.x -         m_angularVelocity * (worldPoint.x - m_sweep.c.x));
+		                  m_linearVelocity.y -         m_angularVelocity * (worldPoint.x - m_sweep.c.x));
 	}
 	
 	/// Get the world velocity of a local point.
@@ -519,7 +520,7 @@ public class b2Body
 		worldPoint.x += m_xf.position.x;
 		worldPoint.y += m_xf.position.y;
 		return new b2Vec2(m_linearVelocity.x +         m_angularVelocity * (worldPoint.y - m_sweep.c.y), 
-		                  m_linearVelocity.x -         m_angularVelocity * (worldPoint.x - m_sweep.c.x));
+		                  m_linearVelocity.y -         m_angularVelocity * (worldPoint.x - m_sweep.c.x));
 	}
 	
 	/// Is this body treated like a bullet for continuous collision detection?

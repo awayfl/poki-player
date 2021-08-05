@@ -27,7 +27,7 @@ export class b2Settings {
 	// Collision
 	public static readonly b2_maxManifoldPoints: number /** int */ = 2;
 	public static readonly b2_maxPolygonVertices: number /** int */ = 8;
-	public static readonly b2_maxProxies: number /** int */ = 512;				// this must be a power of two
+	public static readonly b2_maxProxies: number /** int */ = 1024;				// this must be a power of two
 	public static readonly b2_maxPairs: number /** int */ = 8 * b2Settings.b2_maxProxies;	// this must be a power of two
 
 	// Dynamics

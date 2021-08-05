@@ -95,12 +95,12 @@ public class b2Shape
 	/// is not set.
 	/// @param segment defines the begin and end point of the ray cast.
 	/// @param maxLambda a number typically in the range [0,1].
-	/// @return true if there was an intersection.
+	/// @return e_hitCollide if there was an intersection, e_startsInsideCollide if the point is inside and e_missCollide otherwise
 	public virtual function  TestSegment(xf:b2XForm,
-								lambda:Array, // float pointer
-								normal:b2Vec2, // pointer
-								segment:b2Segment,
-								maxLambda:Number) : Boolean {return false};
+										 lambda:Array, // float pointer
+										 normal:b2Vec2, // pointer
+										 segment:b2Segment,
+										 maxLambda:Number) : int {return e_missCollide};
 
 	/// Given a transform, compute the associated axis aligned bounding box for this shape.
 	/// @param aabb returns the axis aligned box.
@@ -112,8 +112,8 @@ public class b2Shape
 	/// @param xf1 the starting shape world transform.
 	/// @param xf2 the ending shape world transform.
 	public virtual function  ComputeSweptAABB(	aabb:b2AABB,
-									xf1:b2XForm,
-									xf2:b2XForm) : void {};
+												  xf1:b2XForm,
+												  xf2:b2XForm) : void {};
 
 	/// Compute the mass properties of this shape using its dimensions and density.
 	/// The inertia tensor is computed about the local origin, not the centroid.
@@ -137,31 +137,31 @@ public class b2Shape
 	{
 		return m_restitution;
 	}
-	
+
 	//--------------- Internals Below -------------------
 
 	static public function Create(def:b2ShapeDef, allocator:*) : b2Shape
 	{
 		switch (def.type)
 		{
-		case e_circleShape:
+			case e_circleShape:
 			{
 				//void* mem = allocator->Allocate(sizeof(b2CircleShape));
 				return new b2CircleShape(def);
 			}
-		
-		case e_polygonShape:
+
+			case e_polygonShape:
 			{
 				//void* mem = allocator->Allocate(sizeof(b2PolygonShape));
 				return new b2PolygonShape(def);
 			}
-		
-		default:
-			//b2Settings.b2Assert(false);
-			return null;
+
+			default:
+				//b2Settings.b2Assert(false);
+				return null;
 		}
 	}
-	
+
 	static public function Destroy(shape:b2Shape, allocator:*) : void
 	{
 		/*switch (s.m_type)
@@ -170,52 +170,52 @@ public class b2Shape
 			//s->~b2Shape();
 			//allocator->Free(s, sizeof(b2CircleShape));
 			break;
-		
+
 		case e_polygonShape:
 			//s->~b2Shape();
 			//allocator->Free(s, sizeof(b2PolygonShape));
 			break;
-		
+
 		default:
 			//b2Settings.b2Assert(false);
 		}*/
 	}
 
 	public function b2Shape(def:b2ShapeDef){
-		
+
 		m_userData = def.userData;
 		m_friction = def.friction;
 		m_restitution = def.restitution;
 		m_density = def.density;
 		m_body = null;
 		m_sweepRadius = 0.0;
-		
+
 		m_next = null;
-		
+
 		m_proxyId = b2Pair.b2_nullProxy;
-		
+
 		m_filter = def.filter.Copy();
-		
+
 		m_isSensor = def.isSensor;
-		
+
 	}
-	
+
 	//virtual ~b2Shape();
 
 	//
 	static private var s_proxyAABB:b2AABB = new b2AABB();
 	public function CreateProxy(broadPhase:b2BroadPhase, transform:b2XForm) : void{
-		
+
 		//b2Settings.b2Assert(m_proxyId == b2_nullProxy);
-		
+
 		var aabb:b2AABB = s_proxyAABB;
 		ComputeAABB(aabb, transform);
-		
+
 		var inRange:Boolean = broadPhase.InRange(aabb);
-		
+
 		// You are creating a shape outside the world box.
 		//b2Settings.b2Assert(inRange);
-		
+
 		if (inRange)
 		{
 			m_proxyId = broadPhase.CreateProxy(aabb, this);
@@ -224,33 +224,33 @@ public class b2Shape
 		{
 			m_proxyId = b2Pair.b2_nullProxy;
 		}
-		
+
 	}
-	
+
 	public function DestroyProxy(broadPhase:b2BroadPhase) : void{
-		
+
 		if (m_proxyId != b2Pair.b2_nullProxy)
 		{
 			broadPhase.DestroyProxy(m_proxyId);
 			m_proxyId = b2Pair.b2_nullProxy;
 		}
-		
+
 	}
-	
+
 	//
 	static private var s_syncAABB:b2AABB = new b2AABB();
 	//
 	public function Synchronize(broadPhase:b2BroadPhase, transform1:b2XForm, transform2:b2XForm) : Boolean{
-		
+
 		if (m_proxyId == b2Pair.b2_nullProxy)
-		{	
+		{
 			return false;
 		}
-		
+
 		// Compute an AABB that covers the swept shape (may miss some rotation effect).
 		var aabb:b2AABB = s_syncAABB;
 		ComputeSweptAABB(aabb, transform1, transform2);
-		
+
 		if (broadPhase.InRange(aabb))
 		{
 			broadPhase.MoveProxy(m_proxyId, aabb);
@@ -260,24 +260,24 @@ public class b2Shape
 		{
 			return false;
 		}
-		
+
 	}
-	
+
 	static private var s_resetAABB:b2AABB = new b2AABB();
 	public function RefilterProxy(broadPhase:b2BroadPhase, transform:b2XForm) : void{
-		
+
 		if (m_proxyId == b2Pair.b2_nullProxy)
 		{
 			return;
 		}
-		
+
 		broadPhase.DestroyProxy(m_proxyId);
-		
+
 		var aabb:b2AABB = s_resetAABB;
 		ComputeAABB(aabb, transform);
-		
+
 		var inRange:Boolean = broadPhase.InRange(aabb);
-		
+
 		if (inRange)
 		{
 			m_proxyId = broadPhase.CreateProxy(aabb, this);
@@ -286,7 +286,7 @@ public class b2Shape
 		{
 			m_proxyId = b2Pair.b2_nullProxy;
 		}
-		
+
 	}
 
 	public virtual function UpdateSweepRadius(center:b2Vec2) : void{};
@@ -309,21 +309,25 @@ public class b2Shape
 
 	public var m_userData:*;
 
-	
-	
-	
+
+
+
 	/// The various collision shape types supported by Box2D.
 	//enum b2ShapeType
 	//{
-		static public const e_unknownShape:int = 	-1;
-		static public const e_circleShape:int = 	0;
-		static public const e_polygonShape:int = 	1;
-		static public const e_shapeTypeCount:int = 	2;
+	static public const e_unknownShape:int = 	-1;
+	static public const e_circleShape:int = 	0;
+	static public const e_polygonShape:int = 	1;
+	static public const e_shapeTypeCount:int = 	2;
 	//};
-	
-	
-	
+
+	/// Possible return values for TestSegment
+	static public const e_hitCollide:int = 1;
+	static public const e_missCollide:int = 0;
+	static public const e_startsInsideCollide:int = -1;
+
+
 };
 
-	
+
 }

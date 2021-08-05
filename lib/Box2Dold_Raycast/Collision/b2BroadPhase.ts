@@ -26,6 +26,7 @@ import { b2AABB } from './b2AABB';
 import { b2PairCallback } from './b2PairCallback';
 import { b2Math } from '../Common/Math';
 import { b2BoundValues } from './b2BoundValues';
+import {b2Segment} from "./b2Segment";
 
 /*
 This broad phase uses the Sweep and Prune algorithm as described in:
@@ -61,6 +62,7 @@ export class b2BroadPhase {
 		// query results
 		for (i = 0; i < b2Settings.b2_maxProxies; i++) {
 			this.m_queryResults[i] = 0;
+			this.m_querySortKeys[i] = 0;
 		}
 
 		// bounds array
@@ -728,7 +730,262 @@ export class b2BroadPhase {
 
 	}
 
-	//private:
+
+
+	// Query a segment for overlapping proxies, returns the user data and
+	// the count, up to the supplied maximum count.
+	// If sortKey is provided, then it is a function mapping from proxy userDatas to distances along the segment (between 0 & 1)
+	// Then the returned proxies are sorted on that, before being truncated to maxCount
+	// The sortKey of a proxy is assumed to be larger than the closest point inside the proxy along the segment, this allows for early exits
+	// Proxies with a negative sortKey are discarded
+	public QuerySegment(segment:b2Segment, userData:any, maxCount:number, sortKey:Function):number {
+		const uint = (x) => x >>> 0;
+
+		var maxLamda:number = 1;
+	
+		var dx:number = (segment.p2.x-segment.p1.x)*this.m_quantizationFactor.x;
+		var dy:number = (segment.p2.y-segment.p1.y)*this.m_quantizationFactor.y;
+	
+		var sx: number /*int*/ = dx< -Number.MIN_VALUE ? -1 : (dx>Number.MIN_VALUE ? 1 : 0);
+		var sy: number /*int*/ = dy< -Number.MIN_VALUE ? -1 : (dy>Number.MIN_VALUE ? 1 : 0);
+	
+		var p1x:number = this.m_quantizationFactor.x * (segment.p1.x - this.m_worldAABB.lowerBound.x);
+		var p1y:number = this.m_quantizationFactor.y * (segment.p1.y - this.m_worldAABB.lowerBound.y);
+	
+		var startValues = [];
+		var startValues2 = [];
+		startValues[0]=uint(p1x) & (b2Settings.USHRT_MAX - 1);
+		startValues[1]=uint(p1y) & (b2Settings.USHRT_MAX - 1);
+		startValues2[0]=startValues[0]+1;
+		startValues2[1]=startValues[1]+1;
+	
+		var startIndices = [];
+	
+		var xIndex;
+		var yIndex;
+	
+		var proxyId;
+		var proxy:b2Proxy;
+	
+	
+		//First deal with all the proxies that contain segment.p1
+		var lowerIndex;
+		var upperIndex;
+		var lowerIndexOut = [lowerIndex];
+		var upperIndexOut = [upperIndex];
+
+		this.Query(lowerIndexOut, upperIndexOut, startValues[0], startValues2[0], this.m_bounds[0], 2 * this.m_proxyCount, 0);
+		if(sx>=0)	xIndex = upperIndexOut[0]-1;
+		else		xIndex = lowerIndexOut[0];
+
+		this.Query(lowerIndexOut, upperIndexOut, startValues[1], startValues2[1], this.m_bounds[1], 2 * this.m_proxyCount, 1);
+		if(sy>=0)	yIndex = upperIndexOut[0]-1;
+		else		yIndex = lowerIndexOut[0];
+	
+		//If we are using sortKey, then sort what we have so far
+		if(sortKey!=null){
+			//Fill keys
+			for(let i=0;i<this.m_queryResultCount;i++){
+				this.m_querySortKeys[i] = sortKey(this.m_proxyPool[this.m_queryResults[i]].userData);
+			}
+			//Bubble sort, because I'm lazy, and Flash's sort doesn't work on two separate arrays
+			//Remember to sort negative values to the top, so we can easily remove them
+			let i = 0;
+			while(i < this.m_queryResultCount-1){
+				var A:number=this.m_querySortKeys[i];
+				var B:number=this.m_querySortKeys[i+1];
+				if((A<0)?(B>=0):(A>B&&B>=0)){
+					this.m_querySortKeys[i+1] = A;
+					this.m_querySortKeys[i] = B;
+					var tempValue = uint(this.m_queryResults[i+1]);
+					this.m_queryResults[i+1] = this.m_queryResults[i];
+					this.m_queryResults[i] = tempValue;
+					i--;
+					if(i==-1) i=1;
+				}else{
+					i++;
+				}
+			}
+			//Skim off negative values
+			while(this.m_queryResultCount>0 && this.m_querySortKeys[this.m_queryResultCount-1]<0)
+				this.m_queryResultCount--;
+		}
+
+
+		//Now work through the rest of the segment
+		//TODO: Inline this for the 8 possible values of sx,sy? Ugh...
+		var b:Boolean = true;
+
+		var xProgress:number;
+		var yProgress:number;
+		if(xIndex<0||xIndex>=this.m_proxyCount*2)
+			b=false;
+		if(yIndex<0||yIndex>=this.m_proxyCount*2)
+			b=false;
+		if(b){
+			if(sx!=0){
+				//Move on to the next bound
+				if(sx>0){
+					xIndex++;
+					if(xIndex==this.m_proxyCount*2)
+						//stop
+						b=false
+				}else{
+					xIndex--;
+					if(xIndex<0)
+						//stop
+						b=false
+				}
+				xProgress = (this.m_bounds[0][xIndex].value - p1x) / dx;
+			}
+			if(sy!=0){
+				//Move on to the next bound
+				if(sy>0){
+					yIndex++;
+					if(yIndex==this.m_proxyCount*2)
+						//stop
+						b=false
+				}else{
+					yIndex--;
+					if(yIndex<0)
+						//stop
+						b=false
+				}
+				yProgress = (this.m_bounds[1][yIndex].value - p1y) / dy;
+			}
+		}
+		while(b){
+
+			if(sy==0||(sx!=0&&xProgress<yProgress)){
+				if(xProgress>maxLamda)
+					//stop
+					break;
+
+				//Check that we are entering a proxy, not leaving
+				if(sx>0?this.m_bounds[0][xIndex].IsLower():this.m_bounds[0][xIndex].IsUpper()){
+					//Check the other axis of the proxy
+					proxyId = this.m_bounds[0][xIndex].proxyId;
+					proxy = this.m_proxyPool[proxyId];
+					if(sy>=0){
+						/*  CHRIS EDIT:
+						 *  Removing the -1 here fixes an issue where raycasts missed circles near the top.
+						 *  I think the quantization factor may be 1x1,
+						 *  because it only seems to affect circles that are *NOT* already aligned with a 1x1 grid.
+						 *  Removing the -1 makes the if() more inclusive, putting more stress on TestSegment.
+						 *  I haven't changed any of the other 3 variants of this line below
+						 *  (and they probably should be changed.)  */
+						if(proxy.lowerBounds[1]<=yIndex&&proxy.upperBounds[1]>=yIndex){
+							//OLD: if(proxy.lowerBounds[1]<=yIndex-1&&proxy.upperBounds[1]>=yIndex){
+							//Add the proxy
+							if(sortKey!=null){
+								this.AddProxyResult(proxyId,proxy,maxCount,sortKey)
+							}else{
+								this.m_queryResults[this.m_queryResultCount] = proxyId;
+								++this.m_queryResultCount;
+							}
+						}
+					}else{
+						if(proxy.lowerBounds[1]<=yIndex&&proxy.upperBounds[1]>=yIndex+1){
+							//Add the proxy
+							if(sortKey!=null){
+								this.AddProxyResult(proxyId,proxy,maxCount,sortKey)
+							}else{
+								this.m_queryResults[this.m_queryResultCount] = proxyId;
+								++this.m_queryResultCount;
+							}
+						}
+					}
+				}
+
+				//Early out
+				if(sortKey!=null && this.m_queryResultCount==maxCount && this.m_queryResultCount>0 && xProgress>this.m_querySortKeys[this.m_queryResultCount-1])
+					break;
+
+				//Move on to the next bound
+				if(sx>0){
+					xIndex++;
+					if(xIndex==this.m_proxyCount*2)
+						//stop
+						break
+				}else{
+					xIndex--;
+					if(xIndex<0)
+						//stop
+						break
+				}
+				xProgress = (this.m_bounds[0][xIndex].value - p1x) / dx;
+			}else{
+				if(yProgress>maxLamda)
+					//stop
+					break;
+
+				//Check that we are entering a proxy, not leaving
+				if(sy>0?this.m_bounds[1][yIndex].IsLower():this.m_bounds[1][yIndex].IsUpper()){
+					//Check the other axis of the proxy
+					proxyId = this.m_bounds[1][yIndex].proxyId;
+					proxy = this.m_proxyPool[proxyId];
+					if(sx>=0){
+						if(proxy.lowerBounds[0]<=xIndex-1&&proxy.upperBounds[0]>=xIndex){
+							//Add the proxy
+							if(sortKey!=null){
+								this.AddProxyResult(proxyId,proxy,maxCount,sortKey)
+							}else{
+								this.m_queryResults[this.m_queryResultCount] = proxyId;
+								++this.m_queryResultCount;
+							}
+						}
+					}else{
+						if(proxy.lowerBounds[0]<=xIndex&&proxy.upperBounds[0]>=xIndex+1){
+							//Add the proxy
+							if(sortKey!=null){
+								this.AddProxyResult(proxyId,proxy,maxCount,sortKey)
+							}else{
+								this.m_queryResults[this.m_queryResultCount] = proxyId;
+								++this.m_queryResultCount;
+							}
+						}
+					}
+				}
+
+				//Early out
+				if(sortKey!=null && this.m_queryResultCount==maxCount && this.m_queryResultCount>0 && yProgress>this.m_querySortKeys[this.m_queryResultCount-1])
+					break;
+
+				//Move on to the next bound
+				if(sy>0){
+					yIndex++;
+					if(yIndex==this.m_proxyCount*2)
+						//stop
+						break
+				}else{
+					yIndex--;
+					if(yIndex<0)
+						//stop
+						break
+				}
+				yProgress = (this.m_bounds[1][yIndex].value - p1y) / dy;
+			}
+		}
+
+		var count = 0;
+		var i = 0;
+		for (i = 0; i < this.m_queryResultCount && count < maxCount; ++i, ++count)
+		{
+			//b2Settings.b2Assert(m_queryResults[i] < b2Settings.b2_maxProxies);
+			proxy = this.m_proxyPool[ this.m_queryResults[i] ];
+			//b2Settings.b2Assert(proxy.IsValid());
+			userData[i] = proxy.userData;
+		}
+
+		// Prepare for next query.
+		this.m_queryResultCount = 0;
+		this.IncrementTimeStamp();
+
+		return count;
+	}
+
+
+//private:
 	private ComputeBounds(lowerValues: number[], upperValues: number[], aabb: b2AABB): void {
 		//b2Settings.b2Assert(aabb.upperBound.x > aabb.lowerBound.x);
 		//b2Settings.b2Assert(aabb.upperBound.y > aabb.lowerBound.y);
@@ -868,6 +1125,37 @@ export class b2BroadPhase {
 		}
 	}
 
+	private AddProxyResult(proxyId: number,proxy:b2Proxy,maxCount:number,sortKey:Function):void{
+		var key:number = sortKey(proxy.userData)
+		//Filter proxies on positive keys
+		if(key<0)
+			return;
+		//Merge the new key into the sorted list
+		//Could be done much more efficiently
+		var i:number = 0;
+		while(i<this.m_queryResultCount && this.m_querySortKeys[i]<key)
+			i++;
+
+		var tempKey:number = key;
+		var tempId:number = proxyId >>> 0;
+
+		this.m_queryResultCount+=1;
+		if(this.m_queryResultCount>maxCount){
+			this.m_queryResultCount=maxCount
+		}
+
+		while(i<this.m_queryResultCount){
+			var tempKey2:number = this.m_querySortKeys[i];
+			var tempId2 = this.m_queryResults[i];
+			this.m_querySortKeys[i] = tempKey;
+			this.m_queryResults[i] = tempId;
+			tempKey = tempKey2;
+			tempId = tempId2;
+			i++;
+		}
+	}
+
+
 	//public:
 	public m_pairManager: b2PairManager = new b2PairManager();
 
@@ -876,6 +1164,7 @@ export class b2BroadPhase {
 
 	public m_bounds: b2Bound[][] = new Array(2 * b2Settings.b2_maxProxies);
 
+	public m_querySortKeys:number[] = new Array(b2Settings.b2_maxProxies);
 	public m_queryResults: number[] = new Array(b2Settings.b2_maxProxies);
 	public m_queryResultCount: number /** int */;
 
