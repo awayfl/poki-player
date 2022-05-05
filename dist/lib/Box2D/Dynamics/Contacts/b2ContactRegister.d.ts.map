@@ -1,0 +1,1 @@
+{"version":3,"file":"b2ContactRegister.d.ts","sourceRoot":"","sources":["../../../../../lib/Box2D/Dynamics/Contacts/b2ContactRegister.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,aAAa,CAAC;AAExC;;EAEE;AACF,qBAAa,iBAAiB;IACtB,SAAS,EAAE,QAAQ,CAAC;IACpB,UAAU,EAAE,QAAQ,CAAC;IACrB,OAAO,EAAE,OAAO,CAAC;IACjB,IAAI,EAAE,SAAS,CAAC;IAChB,SAAS,EAAE,MAAM,CAAC,UAAU,CAAC;CACpC"}

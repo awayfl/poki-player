@@ -1,0 +1,1 @@
+{"version":3,"file":"b2ContactEdge.d.ts","sourceRoot":"","sources":["../../../../../lib/Box2Dold_Raycast/Dynamics/Contacts/b2ContactEdge.ts"],"names":[],"mappings":"AAkBA,OAAO,EAAE,SAAS,EAAE,MAAM,aAAa,CAAC;AACxC,OAAO,EAAE,MAAM,EAAE,MAAM,WAAW,CAAC;AAOnC,qBAAa,aAAa;IAClB,KAAK,EAAE,MAAM,CAAC;IACd,OAAO,EAAE,SAAS,CAAC;IACnB,IAAI,EAAE,aAAa,CAAC;IACpB,IAAI,EAAE,aAAa,CAAC;CAC3B"}

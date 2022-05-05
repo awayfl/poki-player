@@ -1,0 +1,1 @@
+{"version":3,"file":"b2TimeStep.d.ts","sourceRoot":"","sources":["../../../../lib/Box2Dold/Dynamics/b2TimeStep.ts"],"names":[],"mappings":"AAkBA,qBAAa,UAAU;IACf,EAAE,EAAE,MAAM,CAAC;IACX,MAAM,EAAE,MAAM,CAAC;IACf,OAAO,EAAE,MAAM,CAAC;IAChB,aAAa,EAAE,MAAM,CAAC,UAAU,CAAC;IACjC,YAAY,EAAE,OAAO,CAAC;IACtB,kBAAkB,EAAE,OAAO,CAAC;CACnC"}

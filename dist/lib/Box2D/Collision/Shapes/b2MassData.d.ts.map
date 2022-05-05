@@ -1,0 +1,1 @@
+{"version":3,"file":"b2MassData.d.ts","sourceRoot":"","sources":["../../../../../lib/Box2D/Collision/Shapes/b2MassData.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,MAAM,mBAAmB,CAAC;AAE3C;;EAEE;AACF,qBAAa,UAAU;IACtB;;MAEE;IACK,IAAI,EAAE,MAAM,CAAO;IAC1B;;MAEE;IACK,MAAM,EAAE,MAAM,CAAmB;IACxC;;;MAGE;IACK,CAAC,EAAE,MAAM,CAAO;CACvB"}

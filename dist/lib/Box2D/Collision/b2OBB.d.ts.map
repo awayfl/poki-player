@@ -1,0 +1,1 @@
+{"version":3,"file":"b2OBB.d.ts","sourceRoot":"","sources":["../../../../lib/Box2D/Collision/b2OBB.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,MAAM,EAAE,MAAM,gBAAgB,CAAC;AAEjD;;EAEE;AACF,qBAAa,KAAK;IACjB,QAAQ,EAAE,OAAO,CAAQ;IAEzB,0BAA0B;IACnB,CAAC,EAAE,OAAO,CAAiB;IAClC,yBAAyB;IAClB,MAAM,EAAE,MAAM,CAAgB;IACrC,sBAAsB;IACf,OAAO,EAAE,MAAM,CAAgB;CACtC"}

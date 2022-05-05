@@ -1,0 +1,1 @@
+{"version":3,"file":"b2CircleDef.d.ts","sourceRoot":"","sources":["../../../../../lib/Box2Dold_Raycast/Collision/Shapes/b2CircleDef.ts"],"names":[],"mappings":"AAkBA,OAAO,EAAE,MAAM,EAAE,MAAM,mBAAmB,CAAC;AAC3C,OAAO,EAAE,UAAU,EAAE,MAAM,cAAc,CAAC;AAI1C,qBAAa,WAAY,SAAQ,UAAU;;IAQnC,aAAa,EAAE,MAAM,CAAwB;IAC7C,MAAM,EAAE,MAAM,CAAC;CACtB"}

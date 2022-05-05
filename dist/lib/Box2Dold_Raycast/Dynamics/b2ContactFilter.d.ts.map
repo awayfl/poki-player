@@ -1,0 +1,1 @@
+{"version":3,"file":"b2ContactFilter.d.ts","sourceRoot":"","sources":["../../../../lib/Box2Dold_Raycast/Dynamics/b2ContactFilter.ts"],"names":[],"mappings":"AAmBA,OAAO,EAAE,OAAO,EAAE,MAAM,6BAA6B,CAAC;AAItD,qBAAa,eAAe;IAIpB,aAAa,CAAC,MAAM,EAAE,OAAO,EAAE,MAAM,EAAE,OAAO,GAAG,OAAO;IAYvD,UAAU,CAAC,QAAQ,EAAC,GAAG,EAAE,KAAK,EAAC,OAAO,GAAI,OAAO;IAU1D,OAAc,gBAAgB,EAAE,eAAe,CAAyB;CAEvE"}

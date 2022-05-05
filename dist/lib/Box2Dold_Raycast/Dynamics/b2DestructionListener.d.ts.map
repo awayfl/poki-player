@@ -1,0 +1,1 @@
+{"version":3,"file":"b2DestructionListener.d.ts","sourceRoot":"","sources":["../../../../lib/Box2Dold_Raycast/Dynamics/b2DestructionListener.ts"],"names":[],"mappings":"AAkBA,OAAO,EAAE,OAAO,EAAE,MAAM,6BAA6B,CAAC;AACtD,OAAO,EAAE,OAAO,EAAE,MAAM,UAAU,CAAC;AAKnC,qBAAa,qBAAqB;IAI1B,eAAe,CAAC,KAAK,EAAE,OAAO,GAAG,IAAI;IAIrC,eAAe,CAAC,KAAK,EAAE,OAAO,GAAG,IAAI;CAE5C"}
