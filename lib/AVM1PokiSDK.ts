@@ -51,40 +51,28 @@ export class AVM1PokiSDK extends AVM1Object {
 	}
 
 	public static gameLoadingStart() {
-		if(!AVM1PokiSDK.usePokiSDK){
+		if(this.isAdBlocked()){
 			return;
-		}
-		if (!PokiSDK.hasOwnProperty("adBlocked")) {
-			throw ("AS2 is trying to use the PokiSDK before it has been init")
 		}
 		PokiSDK.gameLoadingStart();
 	}
 
 	public static gameLoadingFinished() {
-		if(!AVM1PokiSDK.usePokiSDK){
+		if(this.isAdBlocked()){
 			return;
-		}
-		if (!PokiSDK.hasOwnProperty("adBlocked")) {
-			throw ("AS2 is trying to use the PokiSDK before it has been init")
 		}
 		PokiSDK.gameLoadingFinished();
 	}
 	public static gameplayStart() {
-		if(!AVM1PokiSDK.usePokiSDK){
+		if(this.isAdBlocked()){
 			return;
-		}
-		if (!PokiSDK.hasOwnProperty("adBlocked")) {
-			throw ("AS2 is trying to use the PokiSDK before it has been init")
 		}
 		PokiSDK.gameplayStart();
 	}
 
 	public static gameplayStop() {
-		if(!AVM1PokiSDK.usePokiSDK){
+		if(this.isAdBlocked()){
 			return;
-		}
-		if (!PokiSDK.hasOwnProperty("adBlocked")) {
-			throw ("AS2 is trying to use the PokiSDK before it has been init")
 		}
 		PokiSDK.gameplayStop();
 	}
@@ -98,12 +86,9 @@ export class AVM1PokiSDK extends AVM1Object {
 				callback.alCall(myTarget);
 			}
 		};
-		if(!AVM1PokiSDK.usePokiSDK){
+		if(this.isAdBlocked()){
 			callback2();
 			return;
-		}
-		if (!PokiSDK.hasOwnProperty("adBlocked")) {
-			throw ("AS2 is trying to use the PokiSDK before it has been init")
 		}
 		AudioManager.setVolume(0);
 		PokiSDK.commercialBreak().then(
@@ -115,6 +100,9 @@ export class AVM1PokiSDK extends AVM1Object {
 		);
 	}
 	public static happyTime(context, intensity) {
+		if(this.isAdBlocked()){
+			return;
+		}
 		PokiSDK.happyTime(intensity);
 	}
 }
