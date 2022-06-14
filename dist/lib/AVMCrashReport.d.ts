@@ -1,3 +1,4 @@
+import { AVMPlayer } from "@awayfl/awayfl-player";
 import { AVMPlayerPoki } from "./AVMPlayerPoki";
 export declare class AVMCrashReport {
     static collectLogs: boolean;
@@ -9,7 +10,7 @@ export declare class AVMCrashReport {
     protected player: AVMPlayerPoki;
     constructor();
     static init(): void;
-    static bind(player: any): void;
+    static bind(player: AVMPlayer): void;
     bind(player: any): void;
     private _attachUI;
     private _requsetSnap;
@@ -17,7 +18,7 @@ export declare class AVMCrashReport {
     private _trigLoad;
     private _attachReporters;
     private _trackLogs;
-    private _catchUnhandled;
+    catchUnhandled(error: ErrorEvent): void;
     generateReport(): {
         date: Date;
         game: {

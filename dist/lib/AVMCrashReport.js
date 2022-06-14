@@ -115,7 +115,6 @@ var AVMCrashReport = /** @class */ (function () {
         link.dispatchEvent(event);
     };
     AVMCrashReport.prototype._attachReporters = function () {
-        window.addEventListener('error', this._catchUnhandled.bind(this));
         var _this = this;
         if (AVMCrashReport.collectLogs) {
             var _loop_1 = function (key) {
@@ -144,7 +143,7 @@ var AVMCrashReport = /** @class */ (function () {
         }
         this.logs.push("[" + type.toUpperCase() + "]: " + args.join(" "));
     };
-    AVMCrashReport.prototype._catchUnhandled = function (error) {
+    AVMCrashReport.prototype.catchUnhandled = function (error) {
         this._trackLogs("exception", error.message, error.filename, error.lineno);
         this.lastCrash = {
             error: error.error,

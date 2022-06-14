@@ -1,3 +1,4 @@
+import { AVMPlayer } from "@awayfl/awayfl-player";
 import { AVMPlayerPoki } from "./AVMPlayerPoki";
 
 const STYLE_TMPLATE = `
@@ -144,7 +145,7 @@ export class AVMCrashReport {
 		AVMCrashReport.instance = new AVMCrashReport();
 	}
 
-	public static bind(player: any) {
+	public static bind(player: AVMPlayer) {
 		if(AVMCrashReport.instance) {
 			AVMCrashReport.instance.bind(player);
 		}
@@ -246,8 +247,6 @@ export class AVMCrashReport {
 	}
 
 	private _attachReporters() {
-		window.addEventListener('error', this._catchUnhandled.bind(this));
-
 		const _this = this;
 		if (AVMCrashReport.collectLogs) {
 			for(let key in original) {
@@ -269,7 +268,7 @@ export class AVMCrashReport {
 		this.logs.push("[" + type.toUpperCase() + "]: " + args.join(" "));
 	}
 
-	private _catchUnhandled(error: ErrorEvent) {
+	public catchUnhandled(error: ErrorEvent) {
 
 		this._trackLogs("exception", error.message, error.filename, error.lineno);
 		this.lastCrash = {

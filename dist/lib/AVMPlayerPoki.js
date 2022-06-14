@@ -67,6 +67,14 @@ var AVMPlayerPoki = /** @class */ (function (_super) {
         }
         return _this;
     }
+    AVMPlayerPoki.prototype.main_loop = function (dt) {
+        try {
+            _super.prototype.main_loop.call(this, dt);
+        }
+        catch (err) {
+            AVMCrashReport.instance.catchUnhandled(err);
+        }
+    };
     AVMPlayerPoki.prototype.onAVMAvailable = function (event) {
         if (event.avmVersion == AVMVERSION.AVM2) {
             //console.log("AVM2 has init");

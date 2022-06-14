@@ -87,6 +87,14 @@ export class AVMPlayerPoki extends AVMPlayer {
 		}
 	}
 
+	protected main_loop(dt: number) {
+		try {
+			super.main_loop(dt);
+		} catch (err) {
+			AVMCrashReport.instance.catchUnhandled(err);
+		}
+	}
+
 	protected onAVMAvailable(event: AVMEvent) {
 		if (event.avmVersion == AVMVERSION.AVM2) {
 			//console.log("AVM2 has init");
