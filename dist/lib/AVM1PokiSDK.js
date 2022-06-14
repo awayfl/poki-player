@@ -1,6 +1,15 @@
 import { __extends } from "tslib";
 import { alIsFunction, wrapAVM1NativeClass, AVM1Object } from "@awayfl/avm1";
 import { AudioManager } from "@awayjs/core";
+function isAdBlocked() {
+    if (!AVM1PokiSDK.usePokiSDK) {
+        return true;
+    }
+    if (!PokiSDK || !PokiSDK.hasOwnProperty("adBlocked")) {
+        throw ("AS2 is trying to use the PokiSDK before it has been init");
+    }
+    return PokiSDK.adBlocked;
+}
 var AVM1PokiSDK = /** @class */ (function (_super) {
     __extends(AVM1PokiSDK, _super);
     function AVM1PokiSDK() {
@@ -24,45 +33,32 @@ var AVM1PokiSDK = /** @class */ (function (_super) {
             };
         }
         ;
-        if (!AVM1PokiSDK.usePokiSDK) {
-            callback(true);
-            return;
-        }
-        if (!PokiSDK || !PokiSDK.hasOwnProperty("adBlocked")) {
-            throw "POKISDK is not available";
-        }
         // poki sdk should already have been init before the game was loaded
-        callback(PokiSDK.adBlocked);
+        callback(isAdBlocked());
     };
     AVM1PokiSDK.isAdBlocked = function () {
-        if (!AVM1PokiSDK.usePokiSDK) {
-            return true;
-        }
-        if (!PokiSDK.hasOwnProperty("adBlocked")) {
-            throw ("AS2 is trying to use the PokiSDK before it has been init");
-        }
-        return PokiSDK.adBlocked;
+        return isAdBlocked();
     };
     AVM1PokiSDK.gameLoadingStart = function () {
-        if (this.isAdBlocked()) {
+        if (isAdBlocked()) {
             return;
         }
         PokiSDK.gameLoadingStart();
     };
     AVM1PokiSDK.gameLoadingFinished = function () {
-        if (this.isAdBlocked()) {
+        if (isAdBlocked()) {
             return;
         }
         PokiSDK.gameLoadingFinished();
     };
     AVM1PokiSDK.gameplayStart = function () {
-        if (this.isAdBlocked()) {
+        if (isAdBlocked()) {
             return;
         }
         PokiSDK.gameplayStart();
     };
     AVM1PokiSDK.gameplayStop = function () {
-        if (this.isAdBlocked()) {
+        if (isAdBlocked()) {
             return;
         }
         PokiSDK.gameplayStop();
@@ -75,7 +71,7 @@ var AVM1PokiSDK = /** @class */ (function (_super) {
             };
         }
         ;
-        if (this.isAdBlocked()) {
+        if (isAdBlocked()) {
             callback2();
             return;
         }
@@ -87,7 +83,7 @@ var AVM1PokiSDK = /** @class */ (function (_super) {
         });
     };
     AVM1PokiSDK.happyTime = function (context, intensity) {
-        if (this.isAdBlocked()) {
+        if (isAdBlocked()) {
             return;
         }
         PokiSDK.happyTime(intensity);
