@@ -1,1 +1,0 @@
-{"version":3,"file":"b2DynamicTreePair.d.ts","sourceRoot":"","sources":["../../../../lib/Box2D/Collision/b2DynamicTreePair.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,iBAAiB,EAAE,MAAM,qBAAqB,CAAC;AAExD;;GAEG;AACH,qBAAa,iBAAiB;IACtB,MAAM,EAAE,iBAAiB,CAAC;IAC1B,MAAM,EAAE,iBAAiB,CAAC;CACjC"}

@@ -1,1 +1,0 @@
-{"version":3,"file":"b2GearJointDef.d.ts","sourceRoot":"","sources":["../../../../../lib/Box2Dold/Dynamics/Joints/b2GearJointDef.ts"],"names":[],"mappings":"AAkBA,OAAO,EAAE,UAAU,EAAE,OAAO,EAAE,MAAM,WAAW,CAAC;AAMhD,qBAAa,cAAe,SAAQ,UAAU;;IAWtC,MAAM,EAAE,OAAO,CAAC;IAEhB,MAAM,EAAE,OAAO,CAAC;IAGhB,KAAK,EAAE,MAAM,CAAC;CACrB"}

@@ -1,1 +1,0 @@
-{"version":3,"file":"b2PairCallback.d.ts","sourceRoot":"","sources":["../../../../lib/Box2Dold/Collision/b2PairCallback.ts"],"names":[],"mappings":"AAkBA,qBAAa,cAAc;IAInB,SAAS,CAAC,cAAc,EAAE,GAAG,EAAE,cAAc,EAAE,GAAG,GAAG,GAAG;IAIxD,WAAW,CAAC,cAAc,EAAE,GAAG,EAAE,cAAc,EAAE,GAAG,EAAE,YAAY,EAAE,GAAG,GAAG,IAAI;CACrF"}

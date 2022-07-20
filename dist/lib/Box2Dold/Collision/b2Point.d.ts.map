@@ -1,1 +1,0 @@
-{"version":3,"file":"b2Point.d.ts","sourceRoot":"","sources":["../../../../lib/Box2Dold/Collision/b2Point.ts"],"names":[],"mappings":"AAkBA,OAAO,EAAE,OAAO,EAAE,MAAM,EAAE,MAAM,gBAAgB,CAAC;AAGjD,qBAAa,OAAO;IACZ,OAAO,CAAC,EAAE,EAAE,OAAO,EAAE,EAAE,EAAE,MAAM,EAAE,EAAE,EAAE,MAAM,GAAG,MAAM;IAIpD,cAAc,CAAC,EAAE,EAAE,OAAO,GAAG,MAAM;IAInC,CAAC,EAAE,MAAM,CAAgB;CAChC"}

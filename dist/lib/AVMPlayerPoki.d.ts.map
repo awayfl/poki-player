@@ -1,1 +1,0 @@
-{"version":3,"file":"AVMPlayerPoki.d.ts","sourceRoot":"","sources":["../../lib/AVMPlayerPoki.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,SAAS,EAAE,MAAM,uBAAuB,CAAC;AAGlD,OAAO,EAAE,QAAQ,EAAc,MAAM,oBAAoB,CAAC;AAgC1D,qBAAa,aAAc,SAAQ,SAAS;gBAE/B,UAAU,EAAE,GAAG;IAmD3B,SAAS,CAAC,SAAS,CAAC,EAAE,EAAE,MAAM;IAQ9B,SAAS,CAAC,cAAc,CAAC,KAAK,EAAE,QAAQ;CAqDxC"}

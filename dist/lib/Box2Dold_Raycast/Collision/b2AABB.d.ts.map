@@ -1,1 +1,0 @@
-{"version":3,"file":"b2AABB.d.ts","sourceRoot":"","sources":["../../../../lib/Box2Dold_Raycast/Collision/b2AABB.ts"],"names":[],"mappings":"AAkBA,OAAO,EAAE,MAAM,EAAE,MAAM,gBAAgB,CAAC;AAGxC,qBAAa,MAAM;IAEX,OAAO,IAAI,OAAO;IASlB,UAAU,EAAE,MAAM,CAAgB;IAClC,UAAU,EAAE,MAAM,CAAgB;CACzC"}

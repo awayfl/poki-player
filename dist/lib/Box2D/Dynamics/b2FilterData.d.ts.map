@@ -1,1 +1,0 @@
-{"version":3,"file":"b2FilterData.d.ts","sourceRoot":"","sources":["../../../../lib/Box2D/Dynamics/b2FilterData.ts"],"names":[],"mappings":"AAAA;;EAEE;AACF,qBAAa,YAAY;IACxB,QAAQ,UAAQ;IAET,IAAI,IAAI,YAAY;IAQ3B;;MAEK;IACE,YAAY,EAAE,MAAM,CAAC,WAAW,CAAU;IAEjD;;;MAGK;IACE,QAAQ,EAAE,MAAM,CAAC,WAAW,CAAU;IAE7C;;;;MAIK;IACE,UAAU,EAAE,MAAM,CAAC,UAAU,CAAK;CACzC"}

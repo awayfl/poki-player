@@ -1,1 +1,0 @@
-{"version":3,"file":"b2ContactImpulse.d.ts","sourceRoot":"","sources":["../../../../lib/Box2D/Dynamics/b2ContactImpulse.ts"],"names":[],"mappings":"AAEA;;;;GAIG;AACH,qBAAa,gBAAgB;IAC5B,QAAQ,EAAE,OAAO,CAAQ;IAElB,cAAc,EAAE,KAAK,CAAC,MAAM,CAAC,CAAsD;IACnF,eAAe,EAAE,KAAK,CAAC,MAAM,CAAC,CAAsD;CAC3F"}

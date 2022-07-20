@@ -1,1 +1,0 @@
-{"version":3,"file":"b2FilterData.d.ts","sourceRoot":"","sources":["../../../../../lib/Box2Dold/Collision/Shapes/b2FilterData.ts"],"names":[],"mappings":"AAmBA,qBAAa,YAAY;IACxB,QAAQ,UAAQ;IAET,IAAI,IAAI,YAAY;IASpB,YAAY,EAAE,MAAM,CAAC,WAAW,CAAU;IAI1C,QAAQ,EAAE,MAAM,CAAC,WAAW,CAAU;IAKtC,UAAU,EAAE,MAAM,CAAC,UAAU,CAAK;CACzC"}

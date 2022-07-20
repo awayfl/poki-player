@@ -1,1 +1,0 @@
-{"version":3,"file":"b2JointEdge.d.ts","sourceRoot":"","sources":["../../../../../lib/Box2Dold_Raycast/Dynamics/Joints/b2JointEdge.ts"],"names":[],"mappings":"AAkBA,OAAO,EAAE,OAAO,EAAE,MAAM,WAAW,CAAC;AACpC,OAAO,EAAE,MAAM,EAAE,MAAM,WAAW,CAAC;AAQnC,qBAAa,WAAW;IAEhB,KAAK,EAAE,MAAM,CAAC;IACd,KAAK,EAAE,OAAO,CAAC;IACf,IAAI,EAAE,WAAW,CAAC;IAClB,IAAI,EAAE,WAAW,CAAC;CAEzB"}

@@ -1,1 +1,0 @@
-{"version":3,"file":"b2JointDef.d.ts","sourceRoot":"","sources":["../../../../../lib/Box2Dold_Raycast/Dynamics/Joints/b2JointDef.ts"],"names":[],"mappings":"AAkBA,OAAO,EAAE,MAAM,EAAE,MAAM,WAAW,CAAC;AAInC,qBAAa,UAAU;;IAWf,IAAI,EAAE,MAAM,CAAC,UAAU,CAAC;IAExB,QAAQ,EAAE,GAAG,CAAC;IAEd,KAAK,EAAE,MAAM,CAAC;IAEd,KAAK,EAAE,MAAM,CAAC;IAEd,gBAAgB,EAAE,OAAO,CAAC;CAEjC"}
