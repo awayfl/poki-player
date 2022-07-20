@@ -1,0 +1,502 @@
+<DOMDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" backgroundColor="#666666" width="960" height="640" currentTimeline="1" xflVersion="22.02" creatorInfo="Adobe Animate" platform="Windows" versionInfo="Saved by Animate Windows 22.0 build 179" majorVersion="22" buildNumber="179" guidesSnapTo="false" objectsSnapTo="false" viewAngle3D="84.5182101128788" vanishingPoint3DX="480" vanishingPoint3DY="320" nextSceneIdentifier="2" playOptionsPlayLoop="false" playOptionsPlayPages="false" playOptionsPlayFrameActions="false" filetypeGUID="DD0DDBBF-5BEF-45B2-9F24-A3048D2A676F" fileGUID="65D9912A786ABA4DB0D5CDE46305990C">
+     <symbols>
+          <Include href="arrowAnim.xml" loadImmediate="false" itemID="628f6c2b-000001e0" lastModified="1653566577"/>
+          <Include href="nextBtn.xml" itemIcon="0" itemID="628f451d-000001d3" lastModified="1653572965"/>
+          <Include href="pauseMc.xml" loadImmediate="false" itemID="628f4804-000001d8" lastModified="1653566087"/>
+          <Include href="prevBtn.xml" itemIcon="0" loadImmediate="false" itemID="628f5b58-000001de" lastModified="1653572999"/>
+          <Include href="Tween 1.xml" itemIcon="1" loadImmediate="false" itemID="628f6c37-000001e5" lastModified="1653566519"/>
+          <Include href="Tween 2.xml" itemIcon="1" loadImmediate="false" itemID="628f6c37-000001e7" lastModified="1653566519"/>
+     </symbols>
+     <timelines>
+          <DOMTimeline name="Scene 1" currentFrame="2">
+               <layers>
+                    <DOMLayer name="actionscript" color="#FF800A" current="true" isSelected="true" autoNamed="false">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements/>
+                              </DOMFrame>
+                              <DOMFrame index="1" keyMode="9728">
+                                   <Actionscript>
+                                        <script><![CDATA[
+//initialize the gameplay or loading/commercialBreak
+var commercial:sampleCommercial = new sampleCommercial();
+
+commercial.initGame();]]></script>
+                                   </Actionscript>
+                                   <elements/>
+                              </DOMFrame>
+                              <DOMFrame index="2" keyMode="9728">
+                                   <Actionscript>
+                                        <script><![CDATA[import flash.events.MouseEvent;
+import com.poki.PokiFlashSDK;
+
+pauseBtn.addEventListener(MouseEvent.CLICK, pauseClick);
+
+function pauseClick(e:MouseEvent):void {
+	if(pauseBtn.currentFrame == 1) { //pause
+		pauseBtn.nextFrame();
+		
+		//add this line everytime the gameplay is stopped
+		PokiFlashSDK.instance().gameplayStop();
+		
+	} else { //resume
+		pauseBtn.prevFrame();
+		
+		//add this line everytime the gameplay is resumed
+		PokiFlashSDK.instance().gameplayStart();
+	}
+}]]></script>
+                                   </Actionscript>
+                                   <elements/>
+                              </DOMFrame>
+                              <DOMFrame index="3" duration="3" keyMode="9728">
+                                   <elements/>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+                    <DOMLayer name="button scripts" color="#FF4FFF" autoNamed="false">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <Actionscript>
+                                        <script><![CDATA[import flash.events.MouseEvent;
+import com.poki.PokiFlashSDK;
+
+PokiFlashSDK.instance().Init(this);
+
+stop();
+
+nextbtn.addEventListener(MouseEvent.CLICK, nextClick);
+
+function nextClick(e:MouseEvent):void {
+	nextFrame();
+	if(currentFrame == 6) {
+		nextbtn.removeEventListener(MouseEvent.CLICK, nextClick);
+		nextbtn.enabled = false;
+		nextbtn.alpha = 0;
+	}
+}]]></script>
+                                   </Actionscript>
+                                   <elements/>
+                              </DOMFrame>
+                              <DOMFrame index="1" keyMode="9728">
+                                   <Actionscript>
+                                        <script><![CDATA[import flash.events.MouseEvent;
+
+prevBtn.addEventListener(MouseEvent.CLICK, prevClick);
+
+function prevClick(e:MouseEvent):void {
+	prevFrame();
+	if(currentFrame == 5) {
+		nextbtn.addEventListener(MouseEvent.CLICK, nextClick);
+		nextbtn.alpha = 1;
+		nextbtn.enabled = true;
+	}
+}]]></script>
+                                   </Actionscript>
+                                   <elements/>
+                              </DOMFrame>
+                              <DOMFrame index="2" keyMode="9728">
+                                   <elements/>
+                              </DOMFrame>
+                              <DOMFrame index="3" duration="3" keyMode="9728">
+                                   <elements/>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+                    <DOMLayer name="texts" color="#4F80FF" autoNamed="false">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements>
+                                        <DOMStaticText left="-106.25" width="922.9" height="468.6" isSelectable="false">
+                                             <matrix>
+                                                  <Matrix tx="124.8" ty="60.85"/>
+                                             </matrix>
+                                             <textRuns>
+                                                  <DOMTextRun>
+                                                       <characters>import the poki folder inside the com folder of the game and then initialize Poki SDK at the first frame:&#xD;&#xD;</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="44.7" size="40" bitmapSize="800" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>import com.poki.PokiFlashSDK;&#xD;&#xD;PokiFlashSDK.instance().Init();</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="45.9" size="40" bitmapSize="800" face="ArialNarrow-BoldItalic"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>&#xD;&#xD;*you can check the script by opening the fla file of this tutorial and then open the first frame of the actionscript layer.</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="44.7" size="40" bitmapSize="800" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                             </textRuns>
+                                        </DOMStaticText>
+                                        <DOMStaticText width="905.05" height="63.5" autoExpand="true" isSelectable="false">
+                                             <matrix>
+                                                  <Matrix tx="27.5" ty="2.35"/>
+                                             </matrix>
+                                             <textRuns>
+                                                  <DOMTextRun>
+                                                       <characters>How to implement Poki's SDK in AS3</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="63.5" size="45" bitmapSize="900" face="Arial-Black" fillColor="#00FFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                             </textRuns>
+                                        </DOMStaticText>
+                                   </elements>
+                              </DOMFrame>
+                              <DOMFrame index="1" keyMode="9728">
+                                   <elements>
+                                        <DOMStaticText left="-106.25" width="922.9" height="571.75" isSelectable="false">
+                                             <matrix>
+                                                  <Matrix tx="124.8" ty="10.15"/>
+                                             </matrix>
+                                             <textRuns>
+                                                  <DOMTextRun>
+                                                       <characters>implement commercial breaks as requested by Poki.&#xD;first store a callback and then call commercialBreak:</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-3" lineHeight="31.3" size="28" bitmapSize="560" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>&#xD;&#xD;</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-3" lineHeight="39.1" size="35" bitmapSize="700" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>import com.poki.PokiFlashSDK;</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-3" lineHeight="31.3" size="28" bitmapSize="560" face="Arial-BoldItalicMT"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>&#xD;&#xD;</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-3" lineHeight="39.1" size="35" bitmapSize="700" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>PokiFlashSDK.instance().callBackCommercialBreak = somecallback;&#xD;PokiFlashSDK.instance().commercialBreak();</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-3" lineHeight="31.3" size="28" bitmapSize="560" face="Arial-BoldItalicMT"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>&#xD;&#xD;</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-3" lineHeight="39.1" size="35" bitmapSize="700" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>instance()</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-3" lineHeight="39.45" size="28" bitmapSize="560" face="Arial-Black" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters> allows you to access the same instance of PokiFlashSDK everywhere in your code (Singleton-pattern).&#xD;And when you enter the gameplay add:</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-3" lineHeight="31.3" size="28" bitmapSize="560" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>&#xD;&#xD;</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-3" lineHeight="33.5" size="30" bitmapSize="600" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>PokiFlashSDK.instance().gameplayStart();&#xD;&#xD;</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-3" lineHeight="31.3" size="28" bitmapSize="560" face="Arial-BoldItalicMT"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>*NOTE: after adding the commercialBreak, please expect that the gameplay will not work in FP but it will work in awayFL.&#xD;&#xD;                                    *check sampleCommercial.as</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-3" lineHeight="31.3" size="28" bitmapSize="560" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                             </textRuns>
+                                        </DOMStaticText>
+                                   </elements>
+                              </DOMFrame>
+                              <DOMFrame index="2" keyMode="9728">
+                                   <elements>
+                                        <DOMStaticText left="-106.25" width="922.9" height="423.5" isSelectable="false">
+                                             <matrix>
+                                                  <Matrix tx="124.8" ty="16.65"/>
+                                             </matrix>
+                                             <textRuns>
+                                                  <DOMTextRun>
+                                                       <characters>when the game is paused, the player dies, the game is over, the level ends or the player quits the game or everytime the gameplay is stopped, we need to tell poki that it stopped.&#xD;So we'll add:&#xD;&#xD;</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-1" lineHeight="33.5" size="30" bitmapSize="600" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>PokiFlashSDK.instance().gameplayStop();</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-1" lineHeight="33.5" size="30" bitmapSize="600" face="Arial-BoldItalicMT"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>&#xD;&#xD;and everytime the gameplay resumes:&#xD;&#xD;</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-1" lineHeight="33.5" size="30" bitmapSize="600" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>PokiFlashSDK.instance().gameplayStart();</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-1" lineHeight="33.5" size="30" bitmapSize="600" face="Arial-BoldItalicMT"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>&#xD;&#xD;*go to the 3rd frame and open the actionscript layer to check the script</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineSpacing="-1" lineHeight="33.5" size="30" bitmapSize="600" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                             </textRuns>
+                                        </DOMStaticText>
+                                   </elements>
+                              </DOMFrame>
+                              <DOMFrame index="3" keyMode="9728">
+                                   <elements>
+                                        <DOMStaticText width="918.45" height="231.5" isSelectable="false">
+                                             <matrix>
+                                                  <Matrix tx="20.8" ty="161.25"/>
+                                             </matrix>
+                                             <textRuns>
+                                                  <DOMTextRun>
+                                                       <characters>We need to remove all outgoing links in the game, only links in the credit screen should stay. Poki and all of the players also didn't want intrusive commercialBreaks, right? So it's best to just place it everytime the gameplay starts. ;)</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="44.7" size="40" bitmapSize="800" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                             </textRuns>
+                                        </DOMStaticText>
+                                   </elements>
+                              </DOMFrame>
+                              <DOMFrame index="4" keyMode="9728">
+                                   <elements>
+                                        <DOMStaticText width="890.45" height="388.5" isSelectable="false">
+                                             <matrix>
+                                                  <Matrix tx="34.8" ty="64.85"/>
+                                             </matrix>
+                                             <textRuns>
+                                                  <DOMTextRun>
+                                                       <characters>Lastly, you will need to enable pokiSDK in the config file of your game in awayFL.&#xD;You can do this by opening </characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="33.5" size="30" bitmapSize="600" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>pokiGame.config.js</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="33.5" size="30" bitmapSize="600" face="Arial-BoldMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters> and set both of this to true:&#xD;&#xD;</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="33.5" size="30" bitmapSize="600" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>rt_pokiSDK: true,&#xD;rt_debugPoki: true,</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="33.5" size="30" bitmapSize="600" face="Arial-BoldItalicMT"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>&#xD;&#xD;</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="33.5" size="30" bitmapSize="600" face="Arial-BoldItalicMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>rt_debugPoki</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="33.5" size="30" bitmapSize="600" face="Arial-BoldMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters> </characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="33.5" size="30" bitmapSize="600" face="Arial-BoldItalicMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>- shows the debug logs coming from poki-sdk.&#xD;&#xD;if both of them are set to false, poki-sdk will be fully disabled.</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="33.5" size="30" bitmapSize="600" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                             </textRuns>
+                                        </DOMStaticText>
+                                   </elements>
+                              </DOMFrame>
+                              <DOMFrame index="5" keyMode="9728">
+                                   <elements>
+                                        <DOMStaticText width="870.95" height="424" isSelectable="false">
+                                             <matrix>
+                                                  <Matrix tx="44.55" ty="54.65"/>
+                                             </matrix>
+                                             <textRuns>
+                                                  <DOMTextRun>
+                                                       <characters>You can see Poki SDK in action by adding this swf in the src folder and </characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="33.5" size="30" bitmapSize="600" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>fileconfigs</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="33.5" size="30" bitmapSize="600" face="Arial-BoldMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters> of </characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="33.5" size="30" bitmapSize="600" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>pokiGame.config.js</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="33.5" size="30" bitmapSize="600" face="Arial-BoldMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>:&#xD;&#xD;</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="33.5" size="30" bitmapSize="600" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>{&#xD;rt_title: "PokiSDK AS3 sample",&#xD;rt_filename: "PokiSDK AS3 sample",&#xD;},&#xD;&#xD;</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="33.5" size="30" bitmapSize="600" face="Arial-BoldItalicMT"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                                  <DOMTextRun>
+                                                       <characters>Then open the developer console of your browser and run the swf in awayFL.&#xD;&#xD;That's it! Have a great day! :)</characters>
+                                                       <textAttrs>
+                                                            <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="33.5" size="30" bitmapSize="600" face="ArialMT" fillColor="#FFFFFF"/>
+                                                       </textAttrs>
+                                                  </DOMTextRun>
+                                             </textRuns>
+                                        </DOMStaticText>
+                                   </elements>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+                    <DOMLayer name="buttons" color="#4FFF4F" autoNamed="false">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements/>
+                              </DOMFrame>
+                              <DOMFrame index="1" keyMode="9728">
+                                   <elements/>
+                              </DOMFrame>
+                              <DOMFrame index="2" keyMode="9728">
+                                   <elements>
+                                        <DOMSymbolInstance libraryItemName="pauseMc" name="pauseBtn" centerPoint3DX="480" centerPoint3DY="474.45">
+                                             <matrix>
+                                                  <Matrix tx="480" ty="474.45"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point/>
+                                             </transformationPoint>
+                                        </DOMSymbolInstance>
+                                        <DOMSymbolInstance libraryItemName="arrowAnim" centerPoint3DX="631.05" centerPoint3DY="471.05">
+                                             <matrix>
+                                                  <Matrix tx="631.05" ty="471.05"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point/>
+                                             </transformationPoint>
+                                        </DOMSymbolInstance>
+                                        <DOMSymbolInstance libraryItemName="arrowAnim" centerPoint3DX="326.25" centerPoint3DY="475.85">
+                                             <matrix>
+                                                  <Matrix a="-1" d="-1" tx="327.45" ty="474.55"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point/>
+                                             </transformationPoint>
+                                        </DOMSymbolInstance>
+                                   </elements>
+                              </DOMFrame>
+                              <DOMFrame index="3" duration="3" keyMode="9728">
+                                   <elements/>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+                    <DOMLayer name="prev button" color="#4FFFFF" autoNamed="false">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements/>
+                              </DOMFrame>
+                              <DOMFrame index="1" duration="5" keyMode="9728">
+                                   <elements>
+                                        <DOMSymbolInstance libraryItemName="prevBtn" name="prevBtn" symbolType="button">
+                                             <matrix>
+                                                  <Matrix tx="114" ty="587.95"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point/>
+                                             </transformationPoint>
+                                        </DOMSymbolInstance>
+                                   </elements>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+                    <DOMLayer name="next button" color="#9933CC" autoNamed="false">
+                         <frames>
+                              <DOMFrame index="0" duration="6" keyMode="9728">
+                                   <elements>
+                                        <DOMSymbolInstance libraryItemName="nextBtn" name="nextbtn" symbolType="button">
+                                             <matrix>
+                                                  <Matrix tx="850" ty="587.95"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point/>
+                                             </transformationPoint>
+                                        </DOMSymbolInstance>
+                                   </elements>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+               </layers>
+          </DOMTimeline>
+     </timelines>
+     <scripts/>
+     <PrinterSettings/>
+     <publishHistory>
+          <PublishItem publishSize="24944" publishTime="1658336977"/>
+          <PublishItem publishSize="24937" publishTime="1658336952"/>
+          <PublishItem publishSize="24662" publishTime="1653627675"/>
+          <PublishItem publishSize="23871" publishTime="1653627304"/>
+          <PublishItem publishSize="23889" publishTime="1653579374"/>
+          <PublishItem publishSize="23888" publishTime="1653578913"/>
+          <PublishItem publishSize="23887" publishTime="1653578708"/>
+          <PublishItem publishSize="23889" publishTime="1653578492"/>
+          <PublishItem publishSize="23888" publishTime="1653578043"/>
+          <PublishItem publishSize="23804" publishTime="1653576822"/>
+          <PublishItem publishSize="23801" publishTime="1653576489"/>
+          <PublishItem publishSize="23888" publishTime="1653575717"/>
+          <PublishItem publishSize="23865" publishTime="1653575363"/>
+          <PublishItem publishSize="23865" publishTime="1653575133"/>
+          <PublishItem publishSize="23866" publishTime="1653573452"/>
+          <PublishItem publishSize="23866" publishTime="1653573422"/>
+          <PublishItem publishSize="23852" publishTime="1653573339"/>
+          <PublishItem publishSize="23835" publishTime="1653573305"/>
+          <PublishItem publishSize="23836" publishTime="1653573282"/>
+          <PublishItem publishSize="21594" publishTime="1653573267"/>
+     </publishHistory>
+</DOMDocument>

@@ -10,6 +10,8 @@ module.exports = {
 	//------------------------------------------------------
 
 	debugConfig: false,			//	log config in build process
+	rt_pokiSDK: true,			//	enable PokiSDK - always true in prod
+	rt_debugPoki: true,		//	debug PokiSDK - always false in prod
 	rt_showFPS: false,			//	show fps display - always false in prod
 	cacheBuster: true,			//	add cachebuster to urls - always false in prod
 	allowURLSearchParams: true, //	allow changing config via url-params - always false in prod
@@ -60,19 +62,13 @@ module.exports = {
 	// it can overwrite other config props aswell
 	fileconfigs: [
 		{
-			rt_title: "Bacon_Ipsem",
-			rt_filename: "Bacon_Ipsem",
-			rt_stageScaleMode: "showAll",
+			rt_title: "PokiSDK AS2 sample",
+			rt_filename: "PokiSDK_AS2_sample",
 		},
 		{
 			rt_showFPS: true,
-			rt_title: "BasicAS3Tests_FP30",
-			rt_filename: "BasicAS3Tests_FP30",
-			rt_stageScaleMode: "showAll",
-		},
-		{
-			rt_title: "text_test",
-			rt_filename: "text_test",
+			rt_title: "PokiSDK AS3 sample",
+			rt_filename: "PokiSDK_AS3_sample",
 			rt_stageScaleMode: "showAll",
 		}
 	],
