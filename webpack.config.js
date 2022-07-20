@@ -1,35 +1,17 @@
+const path = require('path');
+const fs = require('fs');
+const webpack = require('webpack');
+const CopyWebPackPlugin = require('copy-webpack-plugin');
+const HTMLWebPackPlugin = require('html-webpack-plugin');
+const Terser = require('terser-webpack-plugin')
+const rimraf = require("rimraf");
+const tsloader = require.resolve('ts-loader');
+const merge = require("webpack-merge");
+const config = require('./pokiGame.config.js')
 
-const defaultConfig = require('./PokiDefaultGame.config.js');
+module.exports = (env = {}) => {
 
-module.exports = (
-	isProd, config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin,
-	BannerPlugin, fs, rimraf, path, TSLoader,
-	merge, Terser,
-) => {
-
-	if (!config)
-		throw "config must be passed to processConfig";
-	if (!rootPath)
-		throw "rootPath must be passed to processConfig";
-	if (!CopyWebPackPlugin)
-		throw "CopyWebPackPlugin must be passed to processConfig";
-	if (!HTMLWebPackPlugin)
-		throw "HTMLWebPackPlugin must be passed to processConfig";
-	if (!BannerPlugin)
-		throw "BannerPlugin must be passed to processConfig";
-	if (!fs)
-		throw "fs must be passed to processConfig";
-	if (!rimraf)
-		throw "rimraf must be passed to processConfig";
-	if (!path)
-		throw "path must be passed to processConfig";
-	if (!TSLoader)
-		throw "ts-loader must be passed to processConfig";
-	//if (!merge)
-	//	throw "merge must be passed to processConfig";
-
-
-	config = Object.assign(defaultConfig, config);
+	var isProd = !!env.prod;
 
 	// force some configs dependant on prod and dev
 	config.rt_pokiSDK = isProd ? true : config.rt_pokiSDK;
@@ -56,7 +38,7 @@ module.exports = (
 	const entry = {};
 	entry[config.entryName] = [config.entryPath];
 
-	let plugins = processConfig(config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, BannerPlugin, fs, rimraf, path);
+	let plugins = processConfig(config, __dirname, CopyWebPackPlugin, HTMLWebPackPlugin, webpack.BannerPlugin, fs, rimraf, path);
 
 	const common = {
 
@@ -64,11 +46,10 @@ module.exports = (
 
 		output: {
 			pathinfo: false,
-			path: path.join(rootPath, "bin"),
+			path: path.join(__dirname, "bin"),
 			filename: 'js/[name].js'
 		},
 		resolve: {
-			alias: {},
 			// Add `.ts` and `.tsx` as a resolvable extension.
 			extensions: ['.webpack.js', '.web.js', '.js', '.ts', '.tsx']
 		},

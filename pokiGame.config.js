@@ -1,28 +1,27 @@
+const path = require('path');
+
 module.exports = {
 
 
 	// all props prefixed with "rt_" will be added to config that is inserted in html
-	// all props prefixed with "pokiHack_" will be added to config that is inserted in html if rt_pokiSDK==true
 
 	//------------------------------------------------------
-	// global config for this game - same for all swf-files:
+	// global config - same for all swf-files:
 	//------------------------------------------------------
 
 	debugConfig: false,			//	log config in build process
-	rt_pokiSDK: false,			//	enable PokiSDK - always true in prod
-	rt_debugPoki: false,		//	debug PokiSDK - always false in prod
 	rt_showFPS: false,			//	show fps display - always false in prod
 	cacheBuster: true,			//	add cachebuster to urls - always false in prod
 	allowURLSearchParams: true, //	allow changing config via url-params - always false in prod
 	split: false, 				//	create own folder for each file - only available in prod
 
-	entryName: "", 		//	name of webpack-entry - must be set for each config (use package.main ?)
-	entryPath: "", 		//	path to webpack-entry - must be set for each config (use package.main ?)
+	entryName: "Main", 		//	name of webpack-entry - must be set for each config (use package.main ?)
+	entryPath: "./src/Main.ts", 		//	path to webpack-entry - must be set for each config (use package.main ?)
 
-	buildinsPath: "", 	//	path to buildins - must be set when amv2 will be used
-	gameTemplate: "", 	//	path to game-html template - must be set - when using rt_pokISDK=false, it will look for *.nopokisdk.html
-	indexTemplate: "", 	//	path to index-html template - must be set
-	loaderTemplate: "",	//	path to loader.js - must be set
+	buildinsPath: path.join(__dirname, "node_modules", "@awayfl", "awayfl-player", "builtins"),	//	path to buildins - must be set when amv2 will be used
+	indexTemplate: path.join(__dirname, "template", "index_template.html"), 	//	path to game-html template - must be set
+	gameTemplate: path.join(__dirname, "template", "game_template.html"), 	//	path to index-html template - must be set
+	loaderTemplate: path.join(__dirname, "template", "loader.js"),	//	path to loader.js - must be set
 
 	//-------------------------------------------------------------------------
 	// default config for this game - can be overwritten for every file-config:
@@ -48,27 +47,39 @@ module.exports = {
 	// properties for progress bar
 	rt_progress: {
 		direction: "lr", //	lr, td
-		back: "#35809e", // #000
-		line: "#070bff", // "#00ff00",
-		rect: [0.25, 0.65, 0.5, 0.03], // values are percentage of width / height
+		back: "#130d02", // #000
+		line: "#f29f01", // "#00ff00",
+		rect: [0.25, 0.77, 0.5, 0.01], // values are percentage of width / height
 	},
 
+	rt_box2dVersion: 'none', // box2d version: none, legacy, new, custom (external implementation)
 	// list of file-configs. 
 	// each file-config is a object that must provide:
 	//	- rt_title 
 	//	- rt_filename (no extension)
 	// it can overwrite other config props aswell
-	fileconfigs: [],
+	fileconfigs: [
+		{
+			rt_title: "Bacon_Ipsem",
+			rt_filename: "Bacon_Ipsem",
+			rt_stageScaleMode: "showAll",
+		},
+		{
+			rt_showFPS: true,
+			rt_title: "BasicAS3Tests_FP30",
+			rt_filename: "BasicAS3Tests_FP30",
+			rt_stageScaleMode: "showAll",
+		},
+		{
+			rt_title: "text_test",
+			rt_filename: "text_test",
+			rt_stageScaleMode: "showAll",
+		}
+	],
 
-	resources: [],	// list of urls to preload (fonts) - relative to project folder
+	resources: ["template/fonts.swf"],	// list of urls to preload (fonts) - relative to project folder
 
-	assets: [],	// list of assets to copy but not preload
+	assets:[
 
-	rt_skipFramesOfScene: null,				// hack to number of frames on the main-timeline
-	pokiSdkHack_buttonPokiSDKActions: null, 	// map button ids to actions
-	pokiSdkHack_retryButtonIDS: null,		// list of ids with retry buttons
-	pokiSdkHack_retryButtonAction: null,		// action to perform on retry buttons
-	pokiSdkHack_actionOnStop: null,			// action to perform when mc.stop is called
-	pokiSdkHack_actionWhenRetryButtonEncountered: null, // action to perform when a retry button is encountered
-
+	],
 };
