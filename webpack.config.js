@@ -58,7 +58,7 @@ module.exports = (env = {}) => {
 				{
 					test: /\.ts(x?)/,
 					exclude: /node_modules/,
-					loader: TSLoader,
+					loader: tsloader,
 					options: {
 						experimentalWatchApi: true,
 						transpileOnly: true
