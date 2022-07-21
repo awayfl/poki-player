@@ -10,7 +10,7 @@ npm install
 ```
 
 ## Configuration ##
-Open the `pokiGame.config.js` file and add some swf files to `fileconfigs`, including a `rt_title` and `rt_filename` entry (without the .swf extension), eg:
+Open the `pokiGame.config.js` file and add some SWF files to `fileconfigs`, including a `rt_title` and `rt_filename` entry (without the .swf extension), eg:
 
 ```javascript
 fileconfigs: [
@@ -21,19 +21,19 @@ fileconfigs: [
 ],
 ```
 
-`pokiGame.config.js` contains many additional configs (documented inline) that can be applied either global or locally to individual test swfs.
+`pokiGame.config.js` contains many additional configs (documented inline) that can be applied either global or locally to individual test SWFs.
 
 ## PokiSDK examples
-By default,  `fileconfigs` is populated by two example swfs for demonstrating use of the PokiSDK with AS2 and AS3 swfs. The source for these examples can be found in _FLA_Original. `.xfl` files are used to keep things git-friendly.
+By default,  `fileconfigs` contains two example SWFs for demonstrating use of the PokiSDK with AS2 and AS3 swfs. The source for these examples can be found in `/_FLA_Original`. XFL files are used to keep things git-friendly.
 
-> N.B AS2 xfls can only be opened in a version of Flash Pro CS6 or earlier
+> N.B AS2 XFLs can only be opened in a Flash Pro CS6 or earlier
 
 The SDK's most commonly used functions are:
  - `commercialBreak()`
  - `gameplayStart()`
  - `gameplayStop()`
 
-Use cases are described inside the example swfs
+Use cases are described inside the example SWFs / XFLs
 
 ## Preview ##
 
