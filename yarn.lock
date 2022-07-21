@@ -41,6 +41,24 @@
     fs "0.0.1-security"
     tslib "^1.9.0"
 
+"@awayjs/graphics@^0.5.0":
+  version "0.5.71"
+  resolved "https://registry.yarnpkg.com/@awayjs/graphics/-/graphics-0.5.71.tgz#d31e792ea5263a0cc702b7bde1f5e024e8e8dc1e"
+  integrity sha512-1uiDO2rLby3xzNcnFmHkn7rNUiIDMySDB+mVAtlHR3rDWkFgM9C8Qlu4GtiwdbfAbkdtzJkaEEid+pjk92Qr1g==
+  dependencies:
+    tess2-ts "^1.0.8"
+    tess2-wasm "^1.0.9"
+
+"@awayjs/materials@^0.6.0":
+  version "0.6.10"
+  resolved "https://registry.yarnpkg.com/@awayjs/materials/-/materials-0.6.10.tgz#58eb4e496251ffd571555806f3730a5b6158023b"
+  integrity sha512-yXFXf5Uf54vYPdDbmHMyyfAHY4pUgHXACs9v7RwbUW60P+FffP+hP5V+UiNBjnRwB0k5QQMAVB3AbpUjhvkv8g==
+
+"@awayjs/renderer@^0.11.0":
+  version "0.11.49"
+  resolved "https://registry.yarnpkg.com/@awayjs/renderer/-/renderer-0.11.49.tgz#759dcecbd8ab45a46286e31d188932824c84eda6"
+  integrity sha512-bqZ7FyxFrStCrOl+caxblYsE/+7BVEm3eG4sbJ1ccYixyrYMKU1N+M1IjiSyW59w8ufq+QNnKruz6mR4u2v2kw==
+
 "@awayjs/scene@^0.13.0":
   version "0.13.240"
   resolved "https://registry.yarnpkg.com/@awayjs/scene/-/scene-0.13.240.tgz#69dcd8fedb7b4bf161872cb40f773ac510c458f7"
@@ -52,6 +70,11 @@
   version "0.11.129"
   resolved "https://registry.yarnpkg.com/@awayjs/stage/-/stage-0.11.129.tgz#60d88ea50db7d2d0275d37838edfcb0197f1a4ba"
   integrity sha512-umi8nL/I5yYQODrQwb4m46o20iN+68OHrWjumEvxlA4K+fGXQvXeNcqaXcgxsEqjqBEl66NRCmRj9Cz2EOXERQ==
+
+"@awayjs/view@^0.6.0":
+  version "0.6.47"
+  resolved "https://registry.yarnpkg.com/@awayjs/view/-/view-0.6.47.tgz#188be826d91660e742ebcc5b6086e69ec7b1c5cf"
+  integrity sha512-uOT+jGmDa+qddKcvGu+UPtFrn7A1zeP+P3pSVP82WIoysz7XKj34MKiwHGSH9hn+S8rxIVaNcAB/Obe6Rj+Lww==
 
 "@babel/code-frame@^7.10.4":
   version "7.18.6"
@@ -413,9 +436,9 @@ acorn@^6.4.1:
   integrity sha512-XtGIhXwF8YM8bJhGxG5kXgjkEuNGLTkoYqVE+KMR+aspr4KGYmKYg7yUe3KghyQ9yheNwLnjmzh/7+gfDBmHCQ==
 
 acorn@^8.5.0:
-  version "8.7.1"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.7.1.tgz#0197122c843d1bf6d0a5e83220a788f278f63c30"
-  integrity sha512-Xx54uLJQZ19lKygFXOWsscKUbsBZW0CPykPhVQdhIeIwrbPmJzqeASDInc8nKBnp/JT6igTs82qPXz069H8I/A==
+  version "8.8.0"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.8.0.tgz#88c0187620435c7f6015803f5539dae05a9dbea8"
+  integrity sha512-QOxyigPVrpZ2GXT+PFyZTl6TtOFc5egxHIP9IlQ+RbupQuX4RkT/Bee4/kQuC02Xkzg84JcT7oLYtDIQxp+v7w==
 
 aggregate-error@^3.0.0:
   version "3.1.0"
@@ -4643,6 +4666,16 @@ terser@^5.0.0:
     acorn "^8.5.0"
     commander "^2.20.0"
     source-map-support "~0.5.20"
+
+tess2-ts@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/tess2-ts/-/tess2-ts-1.0.8.tgz#ad44ad70a93e8c744719702141892371e6665cc9"
+  integrity sha512-nmqh9T8kqWzb31PhPKenBC/oUif4M2Moo8LHG1wz0Mu5v3xDGWPBcvqunWLE9sBiJjL93x60AM2QWWtd/IZl9w==
+
+tess2-wasm@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/tess2-wasm/-/tess2-wasm-1.0.9.tgz#f86d7170decdca6df87f6ac906313970b3c45cdd"
+  integrity sha512-oBCeEAqGvTZBxVRSTW0hOr7Yw+l8a9Mz4qp/zf4uaK5XPTSFeXdAY2SLyGsvELibyRtjGHXy1FKfTmBknKPHXg==
 
 through2@^2.0.0:
   version "2.0.5"
