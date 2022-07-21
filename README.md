@@ -28,7 +28,7 @@ By default,  `fileconfigs` contains two example SWFs for demonstrating use of th
 
 XFL files are used to keep things git-friendly, and any SWF compiled from Adobe Animate  / Flash Pro is best having its accompanying source uploaded in XFL to allow for easier testing and keep track of any modifications.
 
-> N.B AS2 XFLs can only be opened in a Flash Pro CS6 or earlier
+> N.B. AS2 XFLs can only be opened and compiled in Flash Pro CS6 (recommended) or earlier
 
 The SDK's most commonly used functions are:
  - `commercialBreak()`
@@ -44,4 +44,4 @@ To run a preview of your SWFs, start up the webpack development server
 ```shell
 npm start
 ```
-Once compilation is complete, you can view your SWFs at http://localhost:8080. Updating SWFs or any files in  `/src` will auto-reload the browser. However, any changes to `pokiGame.config.js` will require a restart
+Once compilation is complete, you can view your SWFs through the links at http://localhost:8080. Updating SWFs or any files in  `/src` will auto-reload the browser. However, any changes to `pokiGame.config.js` will require a restart
