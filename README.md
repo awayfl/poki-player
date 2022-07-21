@@ -24,11 +24,11 @@ fileconfigs: [
 `pokiGame.config.js` contains many additional configs (documented inline) that can be applied either global or locally to individual test SWFs.
 
 ## PokiSDK examples
-By default,  `fileconfigs` contains two example SWFs for demonstrating use of the PokiSDK with AS2 and AS3 SWFs. The source for these examples can be found in `/_FLA_Original`.
+By default,  `fileconfigs` contains two example SWFs for demonstrating use of the PokiSDK with AS2 and AS3 SWFs. The source for these examples can be found in `/_XFL_original`.
 
-XFL files are used to keep things git-friendly, and any SWF compiled from Adobe Animate  / Flash Pro is best having its accompanying source uploaded in XFL to allow for easier testing and keep track of any modifications.
+XFL files are used to keep things git-friendly, and any SWF compiled from Adobe Animate  / Flash Pro is best having its accompanying source uploaded in XFL to allow for easier testing and keep track of any modifications. You can easily save  `.fla` files as `.xfl` files from any Adobe Flash IDE.
 
-> N.B. AS2 XFLs can only be opened and compiled in Flash Pro CS6 (recommended) or earlier
+> N.B. AS2 XFLs can only be opened and compiled in Adobe Flash Pro CS6 (recommended) or earlier
 
 The SDK's most commonly used functions are:
  - `commercialBreak()`
