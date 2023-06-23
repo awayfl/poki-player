@@ -33,7 +33,7 @@ module.exports = (
 
 	// force some configs dependant on prod and dev
 	config.rt_pokiSDK = isProd ? true : config.rt_pokiSDK;
-	config.rt_debugPoki = (isProd || !config.rt_pokiSDK) ? false : config.rt_debugPoki;
+	config.rt_debugpoki = (isProd || !config.rt_pokiSDK) ? false : config.rt_debugpoki;
 
 	config.rt_debug = isProd ? false : config.rt_debug;
 
@@ -96,21 +96,29 @@ module.exports = (
 			colors: true // wp4
 		},
 		devServer: {
-			progress: true, // wp4
+			client: {
+				progress: true, // wp5
+			}
 		},
 	}
 
 	const dev = {
+		target: 'web',
 		mode: "development",// wp4
 		//devtool: 'source-map',
-		devtool: 'cheap-module-eval-source-map',//use this option for recompiling libs
+		devtool: 'cheap-module-source-map',//use this option for recompiling libs
 		devServer: {
-			contentBase: path.join(process.cwd(), "src"),
-			inline: true,
-			publicPath: "/",
+			static: {
+				publicPath: "/",
+			},
 			open: false,
-			progress: true,
-
+			hot: false,
+			watchFiles: ['src/**/*.*'],
+			client: {
+				progress: true,
+			},
+			allowedHosts: "all",
+			port: 80,
 		},
 		optimization: {
 			//minimize: false // wp4
@@ -151,16 +159,20 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 	// 	if no split, copy as3 buildins to asset folder
 	//	if split, we will copy them for each game-config individually
 	if (config.buildinsPath && config.buildinsPath.length && !config.split) {
-		plugins.push(new CopyWebPackPlugin([
-			{ from: config.buildinsPath, to: 'assets/builtins' },
-		]));
+		plugins.push(new CopyWebPackPlugin({
+			patterns: [
+				{ from: config.buildinsPath, to: 'assets/builtins' },
+			],
+		}));
 	}
 
 	//	copy loader.js to js-folder
 	//	if split, this will be copied to the subfolder together with webpack-bundel
-	plugins.push(new CopyWebPackPlugin([
-		{ from: config.loaderTemplate, to: 'js' },
-	]));
+	plugins.push(new CopyWebPackPlugin({
+		patterns: [
+			{ from: config.loaderTemplate, to: 'js' },
+		],
+	})); 
 
 	// collect all game-urls to create a index.html:
 	let gameURLS = {};
@@ -177,9 +189,11 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 		//	if split, copy buildins to each output folder:
 
 		if (config.buildinsPath && config.buildinsPath.length && config.split) {
-			plugins.push(new CopyWebPackPlugin([
-				{ from: config.buildinsPath, to: outputPath + 'assets/builtins' },
-			]));
+			plugins.push(new CopyWebPackPlugin({
+				patterns: [
+					{ from: config.buildinsPath, to: outputPath + 'assets/builtins' },
+				],
+			}));
 		}
 
 		// get config for this file merged with default values from global config:
@@ -198,26 +212,32 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 			throw new Error("invalid splashscreen path for fileconfig " + configForHTML.splash);
 		}
 
-		plugins.push(new CopyWebPackPlugin([
-			{ from: swfPath, to: outputPath + "assets" },
-		]));
+		plugins.push(new CopyWebPackPlugin({
+			patterns: [
+				{ from: swfPath, to: outputPath + "assets" },
+			],
+		}));
 
 		if (configForHTML.filename.indexOf('_sdk') > 0) {
 			var filenameNoSDK = configForHTML.filename.replace('_sdk', '');
 			var noSdkPath = path.join(rootPath, "src", "assets", filenameNoSDK + ".swf");
 
 			if (fs.existsSync(noSdkPath)) {
-				plugins.push(new CopyWebPackPlugin([
-					{ from: noSdkPath, to: outputPath + "assets" },
-				]));
+				plugins.push(new CopyWebPackPlugin({
+					patterns: [
+						{ from: noSdkPath, to: outputPath + "assets" },
+					],
+				}));
 
 				configForHTML.filenameNoSdk = filenameNoSDK;
 			}
 		}
 
-		plugins.push(new CopyWebPackPlugin([
-			{ from: path.join(rootPath, "src", "assets", configForHTML.splash), to: outputPath + "assets" },
-		]));
+		plugins.push(new CopyWebPackPlugin({
+			patterns: [
+				{ from: path.join(rootPath, "src", "assets", configForHTML.splash), to: outputPath + "assets" },
+			],
+		}));
 
 		//	optional copy startscreen:
 
@@ -225,9 +245,11 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 			if (!fs.existsSync(path.join(rootPath, "src", "assets", configForHTML.start))) {
 				throw ("invalid startscreen path for fileconfig " + configForHTML.start);
 			}
-			plugins.push(new CopyWebPackPlugin([
-				{ from: path.join(rootPath, "src", "assets", configForHTML.start), to: outputPath + "assets" },
-			]));
+			plugins.push(new CopyWebPackPlugin({
+				patterns: [
+					{ from: path.join(rootPath, "src", "assets", configForHTML.start), to: outputPath + "assets" },
+				],
+			}));
 		}
 
 		// create/prepare config props needed for runtime
@@ -247,9 +269,11 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 					if (!fs.existsSync(res_path)) {
 						throw new Error("invalid filename path for resource " + res_path);
 					}
-					plugins.push(new CopyWebPackPlugin([
-						{ from: res_path, to: outputPath + "assets" },
-					]));
+					plugins.push(new CopyWebPackPlugin({
+						patterns: [
+							{ from: res_path, to: outputPath + "assets" },
+						],
+					}));
 					stats = fs.statSync(res_path);
 					res_filesize = stats["size"];
 					copiedResources[res_unique_outputPath] = res_filesize;
@@ -274,9 +298,11 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 				let folder = fs.lstatSync(res_path).isDirectory();
 				let name = path.basename(res_path);
 
-				plugins.push(new CopyWebPackPlugin([
-					{ from: res_path, to: outputPath + "assets" + (folder ? "/" + name : "")  },
-				]));
+				plugins.push(new CopyWebPackPlugin({
+					patterns: [
+						{ from: res_path, to: outputPath + "assets" + (folder ? "/" + name : "")  },
+					],
+				}));
 				
 			}
 		}
@@ -384,18 +410,20 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 			}
 		}
 
-		plugins.push(new CopyWebPackPlugin([
-			{
-				from: htmlSourcePath,
-				to: htmlOutputPath,
-				transform: function (content, src) {
-					return content.toString()
-						.replace(/INSERT_TITLE/g, configForHTML.title ? configForHTML.title : "UNTITLED")
-						.replace(/INSERT_SPLASHSCREEN/g, configForHTML.splash)
-						.replace(/INSERT_CODE/g, jsStringForHTML);
+		plugins.push(new CopyWebPackPlugin({
+			patterns: [
+				{
+					from: htmlSourcePath,
+					to: htmlOutputPath,
+					transform: function (content, src) {
+						return content.toString()
+							.replace(/INSERT_TITLE/g, configForHTML.title ? configForHTML.title : "UNTITLED")
+							.replace(/INSERT_SPLASHSCREEN/g, configForHTML.splash)
+							.replace(/INSERT_CODE/g, jsStringForHTML);
+					}
 				}
-			}
-		]));
+			],
+		}));
 	};
 
 	var swfPath, stats, filesize;
@@ -419,7 +447,7 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 
 		plugins.push({
 			apply: function (compiler) {
-				compiler.plugin('done', function (compilation) {
+				compiler.hooks.afterEmit.tap('MyPlugin', function (compilation) {
 					console.log("copy build to game-folders");
 					for (var i = 0; i < config.fileconfigs.length; i++) {
 						copyRecursiveSync(fs, path, path.join(rootPath, "bin", "js"), path.join(rootPath, "bin", config.fileconfigs[i].rt_filename, "js"));
