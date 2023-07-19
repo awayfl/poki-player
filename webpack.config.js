@@ -6,7 +6,7 @@ const HTMLWebPackPlugin = require('html-webpack-plugin');
 const Terser = require('terser-webpack-plugin')
 const rimraf = require("rimraf");
 const tsloader = require.resolve('ts-loader');
-const merge = require("webpack-merge");
+const merge = require("webpack-merge").merge;
 const config = require('./pokiGame.config.js')
 const getWebpackConfig = require('./template/PokiConfigHelper.js')
 
