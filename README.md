@@ -6,9 +6,9 @@ Custom AVM Player for Poki projects
  - Node.js ([installation instructions](https://nodejs.dev/learn/how-to-install-nodejs))
 
 ## Installing ##
-Either use the template file [here](https://github.com/awaystudios/poki-template) (recommended) or clone this repo and test your own content by typing the following into a terminal / cmd prompt / shell window:
+Either use the template file [here](https://github.com/awayfl/poki-template) (recommended) or clone this repo and test your own content by typing the following into a terminal / cmd prompt / shell window:
 ```shell
-git clone https://github.com/awaystudios/poki-player
+git clone https://github.com/awayfl/poki-player
 cd poki-player
 npm install
 ```
@@ -48,4 +48,4 @@ To run a preview of your SWFs, start up the webpack development server:
 ```shell
 npm start
 ```
-Once compilation is complete, you can view your SWFs through the links at http://localhost:8080. Updating SWFs or any files in  `/src` will auto-reload the browser. However, any changes to `pokiGame.config.js` will require a restart.
+Once compilation is complete, you can view your SWFs through the links at http://localhost. Updating SWFs or any files in  `/src` will auto-reload the browser. However, any changes to `pokiGame.config.js` will require a restart.
