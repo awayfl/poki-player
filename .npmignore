@@ -1,12 +1,13 @@
 # Build and Release Folders
+bin/
 node_modules/
-jspm_packages/
+src/
+template/
 
 # Dev files
 npm-debug.log
 tests/
 docs/
-.travis.yml
 
 # Project property files
 .actionScriptProperties
