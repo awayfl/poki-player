@@ -5,6 +5,7 @@
     "lib": ["DOM","ScriptHost", "ESNext"],
     "moduleResolution": "node",
     "noImplicitUseStrict": true,
+    "allowSyntheticDefaultImports": true,
     "noEmitHelpers": true,
     "importHelpers": true,
     "declaration": true,

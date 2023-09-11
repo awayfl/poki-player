@@ -1,5 +1,6 @@
 import { AVMPlayer } from "@awayfl/awayfl-player";
 import { AVMPlayerPoki } from "./AVMPlayerPoki";
+import JSZip from "jszip";
 
 const STYLE_TMPLATE = `
 	#report__root {
@@ -108,19 +109,6 @@ const original = {
 	info: console.info,
 };
 
-function attachZip() {
-	const s = document.createElement('script');
-	s.async = true;
-	s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js';
-	s.crossOrigin = 'anonymous';
-
-	document.body.appendChild(s);
-
-	return new Promise((e) => s.onload = e);
-}
-
-let ZIP = null;
-
 export class AVMCrashReport {
 	public static collectLogs = true;
 	public static instance: AVMCrashReport = null;
@@ -136,7 +124,6 @@ export class AVMCrashReport {
 		this._attachUI();
 		this._webGlInfo();
 
-		attachZip().then(e => ZIP = self['JSZip']);
 		//@ts-ignore
 		window.REPORTER = this;
 	}
@@ -199,7 +186,7 @@ export class AVMCrashReport {
 
 	private _saveFile(data: any, name: string) {
 
-		if (!ZIP) {
+		if (!JSZip) {
 			// remove to save size
 			data.snap = null;
 			this._trigLoad(
@@ -214,7 +201,7 @@ export class AVMCrashReport {
 				data.snap = name + '.png';
 			}
 
-			const zip = new ZIP();
+			const zip = new JSZip();
 
 			zip.file(`${name}.json`, JSON.stringify(data, null, 2));
 			
