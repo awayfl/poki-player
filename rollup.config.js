@@ -12,7 +12,7 @@ export default {
 		file: './bundle/poki-player.umd.js',
 	},
 	plugins: [
-		nodeResolve(),
+		nodeResolve({browser: true}),
 		// {
         //     transform(code, id) {
         //         return code.replace(/\/\*\* @class \*\//g, "\/*@__PURE__*\/");
