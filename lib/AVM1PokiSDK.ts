@@ -111,6 +111,6 @@ export class AVM1PokiSDK extends AVM1Object {
 	}
 
 	public static isDesktop() {
-		return !this.isTablet() && !this.isMobile();
+		return !AVM1PokiSDK.isTablet() && !AVM1PokiSDK.isMobile();
 	}
 }
