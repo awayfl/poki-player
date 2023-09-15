@@ -140,15 +140,15 @@ package com.poki {
 		}
 
 		public function isTablet(){
-			ExternalInterface.call("eval","window.isTablet();");
+			return ExternalInterface.call("eval","window.isTablet();");
 		}
 
 		public function isMobile(){
-			ExternalInterface.call("eval","window.isMobile();");
+			return ExternalInterface.call("eval","window.isMobile();");
 		}
 
 		public function isDesktop(){
-			ExternalInterface.call("eval","window.isDesktop();");
+			return ExternalInterface.call("eval","window.isDesktop();");
 		}
 
 		// ============================================================================
