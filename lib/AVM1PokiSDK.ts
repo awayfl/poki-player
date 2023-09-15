@@ -20,7 +20,7 @@ export class AVM1PokiSDK extends AVM1Object {
 
 	public static createAVM1Class(context: AVM1Context): AVM1Object {
 		var wrapped = wrapAVM1NativeClass(context, true, AVM1PokiSDK,
-			['init', 'isAdBlocked', 'gameLoadingStart', 'gameLoadingFinished', 'commercialBreak', 'gameplayStart', 'gameplayStop'], [],
+			['init', 'isAdBlocked', 'gameLoadingStart', 'gameLoadingFinished', 'commercialBreak', 'gameplayStart', 'gameplayStop', 'isTablet', 'isMobile', 'isDesktop'], [],
 			null, AVM1PokiSDK.prototype.avm1Constructor);
 		return wrapped;
 	}
@@ -100,5 +100,17 @@ export class AVM1PokiSDK extends AVM1Object {
 			return;
 		}
 		PokiSDK.happyTime(intensity);
+	}
+
+	public static isTablet() {
+		return /(?:ipad|playbook|(?:android|bb\d+|meego|silk)(?! .+? mobile))/i.test(navigator.userAgent);
+	}
+
+	public static isMobile() {
+		return /(?:phone|windows\s+phone|ipod|blackberry|(?:android|bb\d+|meego|silk|googlebot) .+? mobile|palm|windows\s+ce|opera\smini|avantgo|mobilesafari|docomo)/i.test(navigator.userAgent);
+	}
+
+	public static isDesktop() {
+		return !this.isTablet() && !this.isMobile();
 	}
 }
