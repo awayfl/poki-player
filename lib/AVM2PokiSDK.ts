@@ -44,6 +44,16 @@ export class AVM2PokiSDK {
 					flash.rewardedBreakCompleted(withReward);
 				});
 			};
+
+			window.isTablet = function () {
+                return /(?:ipad|playbook|(?:android|bb\d+|meego|silk)(?! .+? mobile))/i.test(navigator.userAgent);
+            };
+            window.isMobile = function () {
+                return /(?:phone|windows\s+phone|ipod|blackberry|(?:android|bb\d+|meego|silk|googlebot) .+? mobile|palm|windows\s+ce|opera\smini|avantgo|mobilesafari|docomo)/i.test(navigator.userAgent);
+            };
+            window.isDesktop = function () {
+                return !window.isTablet() && !window.isMobile();
+            }
 		};
 
 

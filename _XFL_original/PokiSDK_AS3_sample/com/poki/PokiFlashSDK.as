@@ -139,6 +139,17 @@ package com.poki {
 			ExternalInterface.call("eval","window.rewardedBreak("+intensity.toString()+");");
 		}
 
+		public function isTablet(){
+			ExternalInterface.call("eval","window.isTablet();");
+		}
+
+		public function isMobile(){
+			ExternalInterface.call("eval","window.isMobile();");
+		}
+
+		public function isDesktop(){
+			ExternalInterface.call("eval","window.isDesktop();");
+		}
 
 		// ============================================================================
 		// Below methods are called from the Javavascript SDK and should not be touched
