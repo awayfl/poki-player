@@ -1,5 +1,5 @@
 
-console.debug("Poki-Player - 0.1.3");
+console.debug("Poki-Player - 0.1.4");
 
 
 export {AVM1PokiSDK}						from "./lib/AVM1PokiSDK";
