@@ -242,12 +242,12 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 		//	optional copy startscreen:
 
 		if (configForHTML.start) {
-			if (!fs.existsSync(path.join(rootPath, "src", "assets", configForHTML.start))) {
-				throw ("invalid startscreen path for fileconfig " + configForHTML.start);
+			if (!fs.existsSync(path.join(rootPath, "src", "assets", configForHTML.start.image))) {
+				throw ("invalid startscreen path for fileconfig " + configForHTML.start.image);
 			}
 			plugins.push(new CopyWebPackPlugin({
 				patterns: [
-					{ from: path.join(rootPath, "src", "assets", configForHTML.start), to: outputPath + "assets" },
+					{ from: path.join(rootPath, "src", "assets", configForHTML.start.image), to: outputPath + "assets" },
 				],
 			}));
 		}
@@ -318,7 +318,7 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 			configForHTML.splash = "assets/" + configForHTML.splash;
 
 		if (configForHTML.start)
-			configForHTML.start = "assets/" + configForHTML.start;
+			configForHTML.start.image = "assets/" + configForHTML.start.image;
 
 
 		var runtimePath = "js/" + config.entryName + ".js";
