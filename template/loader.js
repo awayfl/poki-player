@@ -357,8 +357,9 @@ var Loader = (function () {
 				Object.assign(__splash.style, {
 					backgroundImage: `url(${__config.start})`,
 				});				
-				let onCLick = (e) => {
-					window.removeEventListener("click", onCLick);
+				let onClick = (e) => {
+					window.removeEventListener("click", onClick);
+					window.removeEventListener("touchend", onClick);
 					Object.assign(__splash.style, {
 						visibility: "hidden",
 						opacity: 0,
@@ -371,7 +372,8 @@ var Loader = (function () {
 						handleResize=null;
 					}, 500)
 				};
-				window.addEventListener("click", onCLick);
+				window.addEventListener("click", onClick);
+				window.addEventListener('touchend', onClick);
 			}
 			else {
 				// 	no start image. 
