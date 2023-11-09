@@ -239,11 +239,25 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 			],
 		}));
 
-		//	optional copy startscreen:
+		//	optional copy loading image:
+
+		if (configForHTML.loading) {
+			if (!fs.existsSync(path.join(rootPath, "src", "assets", configForHTML.loading.image))) {
+				throw ("invalid loading image path for fileconfig " + configForHTML.loading.image);
+			}
+			plugins.push(new CopyWebPackPlugin({
+				patterns: [
+					{ from: path.join(rootPath, "src", "assets", configForHTML.loading.image), to: outputPath + "assets" },
+				],
+			}));
+		}
+
+
+		//	optional copy start image:
 
 		if (configForHTML.start) {
 			if (!fs.existsSync(path.join(rootPath, "src", "assets", configForHTML.start.image))) {
-				throw ("invalid startscreen path for fileconfig " + configForHTML.start.image);
+				throw ("invalid start image path for fileconfig " + configForHTML.start.image);
 			}
 			plugins.push(new CopyWebPackPlugin({
 				patterns: [
@@ -316,6 +330,9 @@ const processConfig = (config, rootPath, CopyWebPackPlugin, HTMLWebPackPlugin, B
 
 		if (configForHTML.splash)
 			configForHTML.splash = "assets/" + configForHTML.splash;
+
+		if (configForHTML.loading)
+			configForHTML.loading.image = "assets/" + configForHTML.loading.image;
 
 		if (configForHTML.start)
 			configForHTML.start.image = "assets/" + configForHTML.start.image;
