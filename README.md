@@ -3,7 +3,7 @@ Custom AVM Player for Poki projects
 
 ## Prerequistes ##
  - git ([installation instructions](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
- - Node.js ([installation instructions](https://nodejs.dev/learn/how-to-install-nodejs))
+ - Node.js ([installation instructions](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs))
 
 ## Installing ##
 Either use the template file [here](https://github.com/awayfl/poki-template) (recommended) or clone this repo and test your own content by typing the following into a terminal / cmd prompt / shell window:
