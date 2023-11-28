@@ -1,6 +1,8 @@
 set -euo pipefail
 echo [32m Links all AwayFL modules and AwayJS modules to existing checked-out source modules[0m
 read -n 1 -s -r -p "Press any key to continue"
+cd $(dirname "$0")
+cd ..
 
 echo [32m link "@awayjs/core" module[0m
 yarn link @awayjs/core
@@ -38,5 +40,8 @@ yarn link @awayfl/playerglobal
 echo [32m link "@awayfl/awayfl-player" module[0m
 yarn link @awayfl/awayfl-player
 
-echo [32m create "poki-player" link[0m
+echo [32m create "@awayfl/poki-player" link[0m
 yarn link
+
+read -n 1 -s -r -p "Press any key to continue . . ."
+exit
