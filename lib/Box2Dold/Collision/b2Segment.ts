@@ -66,7 +66,7 @@ export class b2Segment {
 			let a: number = (bX * nX + bY * nY);
 
 			if (0.0 <= a && a <= maxLambda * denom) {
-				const mu2: number = -rY * bY + rY * bX;
+				const mu2: number = -rX * bY + rY * bX;
 
 				// Does the segment intersect this segment?
 				if (-k_slop * denom <= mu2 && mu2 <= denom * (1.0 + k_slop)) {
