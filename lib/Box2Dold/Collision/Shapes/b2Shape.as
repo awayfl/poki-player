@@ -155,9 +155,20 @@ public class b2Shape
 				//void* mem = allocator->Allocate(sizeof(b2PolygonShape));
 				return new b2PolygonShape(def);
 			}
-		
+
+		case e_convexArcShape:
+			{
+				return new b2ConvexArcShape(def);
+			}
+
+		case e_concaveArcShape:
+			{
+				return new b2ConcaveArcShape(def);
+			}		
+
 		default:
 			//b2Settings.b2Assert(false);
+			throw new Error("Shape type not found or cannot be added to Dynamic Bodies.");
 			return null;
 		}
 	}
@@ -175,6 +186,16 @@ public class b2Shape
 			//s->~b2Shape();
 			//allocator->Free(s, sizeof(b2PolygonShape));
 			break;
+
+		case e_convexArcShape:
+			//s->~b2Shape();
+			//allocator->Free(s, sizeof(b2ConvexArcShape));
+			break;
+		
+		case e_concaveArcShape:
+			//s->~b2Shape();
+			//allocator->Free(s, sizeof(b2ConcaveArcShape));
+			break;	
 		
 		default:
 			//b2Settings.b2Assert(false);
@@ -318,7 +339,11 @@ public class b2Shape
 		static public const e_unknownShape:int = 	-1;
 		static public const e_circleShape:int = 	0;
 		static public const e_polygonShape:int = 	1;
-		static public const e_shapeTypeCount:int = 	2;
+		static public const e_meshShape:int = 		3; // unused...?
+		static public const e_convexArcShape:int = 	4;
+		static public const e_concaveArcShape:int = 	5;
+		static public const e_staticEdgeShape:int = 	6;
+		static public const e_shapeTypeCount:int = 	7;
 	//};
 	
 	

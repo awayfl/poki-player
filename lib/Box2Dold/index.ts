@@ -1,11 +1,18 @@
 export { b2CircleDef } from './Collision/Shapes/b2CircleDef';
 export { b2CircleShape } from './Collision/Shapes/b2CircleShape';
+export { b2ConcaveArcDef } from './Collision/Shapes/b2ConcaveArcDef';
+export { b2ConcaveArcShape } from './Collision/Shapes/b2ConcaveArcShape';
+export { b2ConvexArcDef } from './Collision/Shapes/b2ConvexArcDef';
+export { b2ConvexArcShape } from './Collision/Shapes/b2ConvexArcShape';
 export { b2FilterData } from './Collision/Shapes/b2FilterData';
 export { b2MassData } from './Collision/Shapes/b2MassData';
 export { b2PolygonDef } from './Collision/Shapes/b2PolygonDef';
 export { b2PolygonShape } from './Collision/Shapes/b2PolygonShape';
 export { b2Shape } from './Collision/Shapes/b2Shape';
 export { b2ShapeDef } from './Collision/Shapes/b2ShapeDef';
+export { b2StaticEdgeChain } from './Collision/Shapes/b2StaticEdgeChain';
+export { b2StaticEdgeChainDef } from './Collision/Shapes/b2StaticEdgeChainDef';
+export { b2StaticEdgeShape } from './Collision/Shapes/b2StaticEdgeShape';
 
 export { b2AABB } from './Collision/b2AABB';
 export { b2Bound } from './Collision/b2Bound';
@@ -16,6 +23,7 @@ export { b2Collision } from './Collision/b2Collision';
 export { b2ContactID } from './Collision/b2ContactID';
 export { b2ContactPoint } from './Collision/b2ContactPoint';
 export { b2Distance } from './Collision/b2Distance';
+export { b2DistanceRegister } from './Collision/b2DistanceRegister';
 export { b2Manifold } from './Collision/b2Manifold';
 export { b2ManifoldPoint } from './Collision/b2ManifoldPoint';
 export { b2OBB } from './Collision/b2OBB';

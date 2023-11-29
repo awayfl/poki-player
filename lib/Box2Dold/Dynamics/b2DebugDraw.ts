@@ -116,6 +116,86 @@ export class b2DebugDraw {
 
 	}
 
+	/// Draw a closed polygon provided in CCW order.
+	public DrawPolyline(vertices:b2Vec2[], vertexCount:number /** uint */, color:b2Color) : void{
+		
+		this.m_sprite.graphics.lineStyle(this.m_lineThickness, color.color, this.m_alpha);
+		this.m_sprite.graphics.moveTo(vertices[0].x * this.m_drawScale, vertices[0].y * this.m_drawScale);
+		for (var i:number /** uint */ = 1; i < vertexCount; i++){
+			this.m_sprite.graphics.lineTo(vertices[i].x * this.m_drawScale, vertices[i].y * this.m_drawScale);
+		}
+		
+	}
+	
+	/// Draw a circle arc
+	public DrawCurve(p1:b2Vec2, p2: b2Vec2, center: b2Vec2, color:b2Color) : void{
+		var s_numSegs:number = 16;
+		var dx:number = p1.x-center.x;
+		var dy:number = p1.y-center.y;
+		var theta1:number = Math.atan2(dy,dx);
+		var theta2:number = Math.atan2(p2.y-center.y,p2.x-center.x);
+		var r:number = Math.sqrt(dx*dx+dy*dy);
+		while(theta2<theta1)
+			theta2 += Math.PI*2;
+		var dtheta:number = (theta2-theta1)/s_numSegs;
+		
+		this.m_sprite.graphics.lineStyle(this.m_lineThickness, color.color, this.m_alpha);
+		this.m_sprite.graphics.moveTo(p1.x * this.m_drawScale, p1.y * this.m_drawScale);
+		for(var theta:number = theta1;theta<=theta2;theta+=dtheta){
+			this.m_sprite.graphics.lineTo( (center.x + r*Math.cos(theta)) * this.m_drawScale, (center.y + r*Math.sin(theta)) * this.m_drawScale);
+		}
+	}
+	
+	public DrawConcaveArc(vertices:b2Vec2[], vertexCount:number /** uint */, center:b2Vec2, color:b2Color) : void {
+		this.m_sprite.graphics.lineStyle(this.m_lineThickness, color.color, this.m_alpha);
+		this.m_sprite.graphics.moveTo(vertices[0].x, this.m_drawScale, vertices[0].y * this.m_drawScale);
+		//Draw arc
+		var s_numSegs:number = 16;
+		var dx:number = vertices[0].x-center.x;
+		var dy:number = vertices[0].y-center.y;
+		var theta1:number = Math.atan2(dy,dx);
+		var theta2:number = Math.atan2(vertices[1].y-center.y,vertices[1].x-center.x);
+		var r:number = Math.sqrt(dx*dx+dy*dy);
+		while(theta2>theta1)
+			theta2 -= Math.PI*2;
+		var dtheta:number = (theta1-theta2)/s_numSegs;
+		
+		for(var theta:number = theta1;theta>theta2;theta-=dtheta){
+			this.m_sprite.graphics.lineTo( (center.x + r*Math.cos(theta)) * this.m_drawScale, (center.y + r*Math.sin(theta)) * this.m_drawScale);
+		}		
+		//Draw polyline
+		for (var i:number /** uint */ = 1; i < vertexCount; i++){
+			this.m_sprite.graphics.lineTo(vertices[i].x * this.m_drawScale, vertices[i].y * this.m_drawScale);
+		}
+		this.m_sprite.graphics.lineTo(vertices[0].x * this.m_drawScale, vertices[0].y *this.m_drawScale);	
+	}
+	
+	public DrawSolidConcaveArc(vertices:b2Vec2[], vertexCount:number /** uint */, center:b2Vec2, color:b2Color) : void {
+		this.m_sprite.graphics.lineStyle(this.m_lineThickness, color.color, this.m_alpha);
+		this.m_sprite.graphics.moveTo(vertices[0].x * this.m_drawScale, vertices[0].y * this.m_drawScale);
+		this.m_sprite.graphics.beginFill(color.color,this.m_fillAlpha);
+		//Draw arc
+		var s_numSegs:number = 16;
+		var dx:number = vertices[0].x-center.x;
+		var dy:number = vertices[0].y-center.y;
+		var theta1:number = Math.atan2(dy,dx);
+		var theta2:number = Math.atan2(vertices[1].y-center.y,vertices[1].x-center.x);
+		var r:number = Math.sqrt(dx*dx+dy*dy);
+		while(theta2>theta1)
+			theta2 -= Math.PI*2;
+		var dtheta:number = (theta1-theta2)/s_numSegs;
+		
+		for(var theta:number = theta1;theta>theta2;theta-=dtheta){
+			this.m_sprite.graphics.lineTo( (center.x + r*Math.cos(theta)) * this.m_drawScale, (center.y + r*Math.sin(theta)) * this.m_drawScale);
+		}			
+		//Draw polyline
+		for (var i:number /** uint */ = 1; i < vertexCount; i++){
+			this.m_sprite.graphics.lineTo(vertices[i].x * this.m_drawScale, vertices[i].y * this.m_drawScale);
+		}
+		this.m_sprite.graphics.lineTo(vertices[0].x * this.m_drawScale, vertices[0].y * this.m_drawScale);
+		this.m_sprite.graphics.endFill();		
+	}
+
 	/// Draw a transform. Choose your own length scale.
 	/// @param xf a transform.
 	public DrawXForm(xf: b2XForm): void {

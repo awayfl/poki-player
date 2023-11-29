@@ -45,6 +45,11 @@ import { b2Pair } from '../Collision/b2Pair';
 import { b2Proxy } from '../Collision/b2Proxy';
 import { b2OBB } from '../Collision/b2OBB';
 import { b2ContactManager } from './b2ContactManager';
+import { b2Distance } from '../Collision/b2Distance';
+import { b2ShapeDef } from '../Collision/Shapes/b2ShapeDef';
+import { b2ConcaveArcShape } from '../Collision/Shapes/b2ConcaveArcShape';
+import { b2StaticEdgeShape } from '../Collision/Shapes/b2StaticEdgeShape';
+import { b2StaticEdgeChain } from '../Collision/Shapes/b2StaticEdgeChain';
 
 export class b2World {
 	readonly __fast__ = true;
@@ -86,6 +91,9 @@ export class b2World {
 
 		const bd: b2BodyDef = new b2BodyDef();
 		this.m_groundBody = this.CreateBody(bd);
+
+		var b2Dis:b2Distance		=new b2Distance();
+		b2Distance.InitializeRegisters();
 	}
 
 	/// Destruct the world. All physics entities are destroyed and all heap memory is released.
@@ -364,6 +372,23 @@ export class b2World {
 			}
 		}
 
+	}
+
+	public CreateGroundShape(def:b2ShapeDef) : any {
+		//b2Settings.b2Assert(m_lock == false);
+		if (this.m_lock == true)
+		{
+			return null;
+		}
+		
+		switch (def.type)
+		{
+		case b2Shape.e_staticEdgeShape:
+			return new b2StaticEdgeChain(def, this);
+		
+		default:
+			return this.m_groundBody.CreateShape(def);
+		}
 	}
 
 	/// Re-filter a shape. This re-runs contact filtering on a shape.
@@ -971,6 +996,49 @@ export class b2World {
 							vertices[i] = b2Math.b2MulX(xf, localCoreVertices[i]);
 						}
 						this.m_debugDraw.DrawPolygon(vertices, vertexCount, coreColor);
+					}
+				}
+				break;
+
+			case b2Shape.e_concaveArcShape:
+				{
+					var arc:b2ConcaveArcShape = (shape as b2ConcaveArcShape);
+					const vertexCount = arc.GetVertexCount();
+					const localVertices = arc.GetVertices();
+					
+					const center = b2Math.b2MulX(xf, arc.m_arcCenter);
+					
+					//b2Assert(vertexCount <= b2_maxPolygonVertices);
+					const vertices = new Array(b2Settings.b2_maxPolygonVertices);
+					
+					for (let i = 0; i < vertexCount; ++i)
+					{
+						vertices[i] = b2Math.b2MulX(xf, localVertices[i]);
+					}
+					
+					this.m_debugDraw.DrawSolidConcaveArc(vertices, vertexCount, center, color);
+					
+					if (core)
+					{
+						const localCoreVertices = arc.GetCoreVertices();
+						for (let i = 0; i < vertexCount; ++i)
+						{
+							vertices[i] = b2Math.b2MulX(xf, localCoreVertices[i]);
+						}
+						this.m_debugDraw.DrawConcaveArc(vertices, vertexCount, center, coreColor);
+					}
+				}
+				break;
+				
+			case b2Shape.e_staticEdgeShape:
+				{
+					var edge:b2StaticEdgeShape = (shape as b2StaticEdgeShape);
+					
+					this.m_debugDraw.DrawSegment(edge.m_v1, edge.m_v2, color);
+					
+					if (core)
+					{
+						this.m_debugDraw.DrawSegment(edge.m_coreV1, edge.m_coreV2, coreColor);
 					}
 				}
 				break;

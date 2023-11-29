@@ -67,6 +67,9 @@ public class b2World
 		
 		var bd:b2BodyDef = new b2BodyDef();
 		m_groundBody = CreateBody(bd);
+		
+		var b2Dis:b2Distance		=new b2Distance();
+		b2Distance.InitializeRegisters();
 	}
 
 	/// Destruct the world. All physics entities are destroyed and all heap memory is released.
@@ -348,6 +351,23 @@ public class b2World
 			}
 		}
 		
+	}
+	
+	public function CreateGroundShape(def:b2ShapeDef) : * {
+		//b2Settings.b2Assert(m_lock == false);
+		if (m_lock == true)
+		{
+			return null;
+		}
+		
+		switch (def.type)
+		{
+		case b2Shape.e_staticEdgeShape:
+			return new b2StaticEdgeChain(def, this);
+		
+		default:
+			return m_groundBody.CreateShape(def);
+		}
 	}
 
 	/// Re-filter a shape. This re-runs contact filtering on a shape.
@@ -1020,6 +1040,50 @@ public class b2World
 				}
 			}
 			break;
+		
+		case b2Shape.e_concaveArcShape:
+			{
+				var arc:b2ConcaveArcShape = (shape as b2ConcaveArcShape);
+				vertexCount = arc.GetVertexCount();
+				localVertices = arc.GetVertices();
+				
+				center = b2Math.b2MulX(xf, arc.m_arcCenter);
+				
+				//b2Assert(vertexCount <= b2_maxPolygonVertices);
+				vertices = new Array(b2Settings.b2_maxPolygonVertices);
+				
+				for (i = 0; i < vertexCount; ++i)
+				{
+					vertices[i] = b2Math.b2MulX(xf, localVertices[i]);
+				}
+				
+				m_debugDraw.DrawSolidConcaveArc(vertices, vertexCount, center, color);
+				
+				if (core)
+				{
+					localCoreVertices = arc.GetCoreVertices();
+					for (i = 0; i < vertexCount; ++i)
+					{
+						vertices[i] = b2Math.b2MulX(xf, localCoreVertices[i]);
+					}
+					m_debugDraw.DrawConcaveArc(vertices, vertexCount, center, coreColor);
+				}
+			}
+			break;
+			
+		case b2Shape.e_staticEdgeShape:
+			{
+				var edge:b2StaticEdgeShape = (shape as b2StaticEdgeShape);
+				
+				m_debugDraw.DrawSegment(edge.m_v1, edge.m_v2, color);
+				
+				if (core)
+				{
+					m_debugDraw.DrawSegment(edge.m_coreV1, edge.m_coreV2, coreColor);
+				}
+			}
+			break;
+		
 		}
 	}
 	

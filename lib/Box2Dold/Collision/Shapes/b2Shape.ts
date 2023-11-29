@@ -146,6 +146,16 @@ export class b2Shape {
 			//allocator->Free(s, sizeof(b2PolygonShape));
 			break;
 
+		case e_convexArcShape:
+			//s->~b2Shape();
+			//allocator->Free(s, sizeof(b2ConvexArcShape));
+			break;
+		
+		case e_concaveArcShape:
+			//s->~b2Shape();
+			//allocator->Free(s, sizeof(b2ConcaveArcShape));
+			break;	
+
 		default:
 			//b2Settings.b2Assert(false);
 		}*/
@@ -273,7 +283,11 @@ export class b2Shape {
 	public static readonly e_unknownShape: number /** int */ = 	-1;
 	public static readonly e_circleShape: number /** int */ = 	0;
 	public static readonly e_polygonShape: number /** int */ = 	1;
-	public static readonly e_shapeTypeCount: number /** int */ = 	2;
+	public static readonly e_meshShape:number = 		3; // unused...?
+	public static readonly e_convexArcShape:number = 	4;
+	public static readonly e_concaveArcShape:number = 	5;
+	public static readonly e_staticEdgeShape:number = 	6;
+	public static readonly e_shapeTypeCount:number = 	7;
 	//};
 
 }

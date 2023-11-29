@@ -26,6 +26,8 @@ import { b2BodyDef } from './b2BodyDef';
 import { b2World } from './b2World';
 import { b2CircleShape } from '../Collision/Shapes/b2CircleShape';
 import { b2PolygonShape } from '../Collision/Shapes/b2PolygonShape';
+import { b2ConvexArcShape } from '../Collision/Shapes/b2ConvexArcShape';
+import { b2ConcaveArcShape } from '../Collision/Shapes/b2ConcaveArcShape';
 
 /// A rigid body.
 export class b2Body {
@@ -56,6 +58,21 @@ export class b2Body {
 				s = new b2PolygonShape(def);
 				break;
 			}
+
+			case b2Shape.e_convexArcShape:
+				{
+					return new b2ConvexArcShape(def);
+				}
+
+			case b2Shape.e_concaveArcShape:
+				{
+					return new b2ConcaveArcShape(def);
+				}		
+
+			default:
+				//b2Settings.b2Assert(false);
+				throw new Error("Shape type not found or cannot be added to Dynamic Bodies.");
+				return null;
 		}
 
 		s.m_next = this.m_shapeList;
