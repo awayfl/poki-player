@@ -46,6 +46,7 @@ export { b2Color } from './Common/b2Color';
 export { b2Settings } from './Common/b2Settings';
 
 export { b2CircleContact } from './Dynamics/Contacts/b2CircleContact';
+export { b2ConcaveArcAndCircleContact } from './Dynamics/Contacts/b2ConcaveArcAndCircleContact';
 export { b2Contact } from './Dynamics/Contacts/b2Contact';
 export { b2ContactConstraint } from './Dynamics/Contacts/b2ContactConstraint';
 export { b2ContactConstraintPoint } from './Dynamics/Contacts/b2ContactConstraintPoint';
@@ -55,7 +56,10 @@ export { b2ContactResult } from './Dynamics/Contacts/b2ContactResult';
 export { b2ContactSolver } from './Dynamics/Contacts/b2ContactSolver';
 export { b2NullContact } from './Dynamics/Contacts/b2NullContact';
 export { b2PolyAndCircleContact } from './Dynamics/Contacts/b2PolyAndCircleContact';
+export { b2PolyAndConcaveArcContact } from './Dynamics/Contacts/b2PolyAndConcaveArcContact';
+export { b2PolyAndStaticEdgeContact } from './Dynamics/Contacts/b2PolyAndStaticEdgeContact';
 export { b2PolygonContact } from './Dynamics/Contacts/b2PolygonContact';
+export { b2StaticEdgeAndCircleContact } from './Dynamics/Contacts/b2StaticEdgeAndCircleContact';
 
 export { b2DistanceJoint } from './Dynamics/Joints/b2DistanceJoint';
 export { b2DistanceJointDef } from './Dynamics/Joints/b2DistanceJointDef';

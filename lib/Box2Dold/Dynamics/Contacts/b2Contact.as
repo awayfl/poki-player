@@ -103,6 +103,12 @@ public class b2Contact
 		AddType(b2PolyAndCircleContact.Create, b2PolyAndCircleContact.Destroy, b2Shape.e_polygonShape, b2Shape.e_circleShape);
 		AddType(b2PolygonContact.Create, b2PolygonContact.Destroy, b2Shape.e_polygonShape, b2Shape.e_polygonShape);
 		
+		AddType(b2ConcaveArcAndCircleContact.Create, b2ConcaveArcAndCircleContact.Destroy, b2Shape.e_concaveArcShape, b2Shape.e_circleShape);
+		AddType(b2PolyAndConcaveArcContact.Create, b2PolyAndConcaveArcContact.Destroy, b2Shape.e_polygonShape, b2Shape.e_concaveArcShape);
+		
+		AddType(b2StaticEdgeAndCircleContact.Create, b2StaticEdgeAndCircleContact.Destroy, b2Shape.e_staticEdgeShape, b2Shape.e_circleShape);
+		AddType(b2PolyAndStaticEdgeContact.Create, b2PolyAndStaticEdgeContact.Destroy, b2Shape.e_polygonShape, b2Shape.e_staticEdgeShape);
+		
 	}
 	static public function Create(shape1:b2Shape, shape2:b2Shape, allocator:*):b2Contact{
 		if (s_initialized == false)

@@ -287,10 +287,10 @@ export class b2Distance {
 		let tVec: b2Vec2;
 
 		//b2Vec2 p1s[3], p2s[3];
-		const p1s: b2Vec2[] = this.s_p1s;
-		const p2s: b2Vec2[] = this.s_p2s;
+		const p1s: b2Vec2[] = b2Distance.s_p1s;
+		const p2s: b2Vec2[] = b2Distance.s_p2s;
 		//b2Vec2 points[3];
-		const points: b2Vec2[] = this.s_points;
+		const points: b2Vec2[] = b2Distance.s_points;
 		//int32 pointCount = 0;
 		let pointCount: number /** int */ = 0;
 
@@ -325,7 +325,7 @@ export class b2Distance {
 					//*x2 = w2;
 					x2.SetV(w2);
 				}
-				this.g_GJK_Iterations = iter;
+				b2Distance.g_GJK_Iterations = iter;
 				return Math.sqrt(vSqr);
 			}
 
@@ -359,7 +359,7 @@ export class b2Distance {
 					tVec = points[1];
 					tVec.x = wX;
 					tVec.y = wY;
-					pointCount = this.ProcessTwo(x1, x2, p1s, p2s, points);
+					pointCount = b2Distance.ProcessTwo(x1, x2, p1s, p2s, points);
 					break;
 
 				case 2:
@@ -373,13 +373,13 @@ export class b2Distance {
 					tVec = points[2];
 					tVec.x = wX;
 					tVec.y = wY;
-					pointCount = this.ProcessThree(x1, x2, p1s, p2s, points);
+					pointCount = b2Distance.ProcessThree(x1, x2, p1s, p2s, points);
 					break;
 			}
 
 			// If we have three points, then the origin is in the corresponding triangle.
 			if (pointCount == 3) {
-				this.g_GJK_Iterations = iter;
+				b2Distance.g_GJK_Iterations = iter;
 				return 0.0;
 			}
 
@@ -392,7 +392,7 @@ export class b2Distance {
 			}
 
 			if (pointCount == 3 || vSqr <= 100.0 * Number.MIN_VALUE * maxSqr) {
-				this.g_GJK_Iterations = iter;
+				b2Distance.g_GJK_Iterations = iter;
 				//v = *x2 - *x1;
 				vX = x2.x - x1.x;
 				vY = x2.y - x1.y;
@@ -402,7 +402,7 @@ export class b2Distance {
 			}
 		}
 
-		this.g_GJK_Iterations = maxIterations;
+		b2Distance.g_GJK_Iterations = maxIterations;
 		return Math.sqrt(vSqr);
 	}
 
@@ -557,7 +557,7 @@ export class b2Distance {
 		let tMat: b2Mat22;
 		let tVec: b2Vec2;
 
-		const point: b2Point = this.gPoint;
+		const point: b2Point = b2Distance.gPoint;
 		//point.p = b2Mul(xf2, circle->m_localPosition);
 		tVec = circle.m_localPosition;
 		tMat = xf2.R;
@@ -565,7 +565,7 @@ export class b2Distance {
 		point.p.y = xf2.position.y + (tMat.col1.y * tVec.x + tMat.col2.y * tVec.y);
 
 		// Create variation of function to replace template
-		let distance: number = this.DistanceGeneric(x1, x2, polygon, xf1, point, b2Math.b2XForm_identity);
+		let distance: number = b2Distance.DistanceGeneric(x1, x2, polygon, xf1, point, b2Math.b2XForm_identity);
 
 		const r: number = circle.m_radius - b2Settings.b2_toiSlop;
 
@@ -600,7 +600,7 @@ export class b2Distance {
 		var tMat:b2Mat22;
 		var tVec:b2Vec2;
 		
-		var point:b2Point = this.gPoint;
+		var point:b2Point = b2Distance.gPoint;
 		//point.p = b2Mul(xf2, circle->m_localPosition);
 		tVec = circle.m_localPosition;
 		tMat = xf2.R;
@@ -608,7 +608,7 @@ export class b2Distance {
 		point.p.y = xf2.position.y + (tMat.col1.y * tVec.x + tMat.col2.y * tVec.y);
 	
 		// Create variation of function to replace template
-		var distance:number = this.DistanceGeneric(x1, x2, polygon, xf1, point, b2Math.b2XForm_identity);
+		var distance:number = b2Distance.DistanceGeneric(x1, x2, polygon, xf1, point, b2Math.b2XForm_identity);
 		
 		var r:number = circle.m_radius - b2Settings.b2_toiSlop;
 		
@@ -714,7 +714,7 @@ export class b2Distance {
 		arc:b2ConcaveArcShape, xf2:b2XForm) : number
 	{
 		let t=-1;
-		var gd:number = this.DistanceGeneric(x1,x2,polygon,xf1,arc,xf2);
+		var gd:number = b2Distance.DistanceGeneric(x1,x2,polygon,xf1,arc,xf2);
 		
 		var vx0:b2Vec2 = b2Math.b2MulX(xf2,arc.m_coreVertices[0]);
 		var normal:b2Vec2 = b2Math.b2MulMV(xf2.R,arc.m_normals[0]);
@@ -786,9 +786,9 @@ export class b2Distance {
 		
 		var sx1:b2Vec2 = new b2Vec2();
 		var sx2:b2Vec2 = new b2Vec2();
-		var point:b2Point = this.gPoint;
+		var point:b2Point = b2Distance.gPoint;
 		point.p.SetV(vx0);
-		var anotherDistance:number = this.DistanceGeneric(sx1, sx2, polygon, xf1, point, b2Math.b2XForm_identity);
+		var anotherDistance:number = b2Distance.DistanceGeneric(sx1, sx2, polygon, xf1, point, b2Math.b2XForm_identity);
 		if(anotherDistance<separation){
 			t=4;
 			separation=anotherDistance;
@@ -796,7 +796,7 @@ export class b2Distance {
 			x2.SetV(sx2);
 		}
 		point.p.SetV(vx1);
-		anotherDistance = this.DistanceGeneric(sx1, sx2, polygon, xf1, point, b2Math.b2XForm_identity);
+		anotherDistance = b2Distance.DistanceGeneric(sx1, sx2, polygon, xf1, point, b2Math.b2XForm_identity);
 		if(anotherDistance<separation){
 			t=5;
 			separation=anotherDistance;
@@ -818,7 +818,7 @@ export class b2Distance {
 		//b2ShapeType type2 = shape2->GetType();
 		const type2: number /** int */ = shape2.m_type;
 
-		var register: b2DistanceRegister = this.s_registers[type1 + type2 * b2Shape.e_shapeTypeCount];
+		var register: b2DistanceRegister = b2Distance.s_registers[type1 + type2 * b2Shape.e_shapeTypeCount];
 		if (register != null) {
 			if (register.primary) {
 				return register.fcn(x1, x2, shape1, xf1, shape2, xf2);

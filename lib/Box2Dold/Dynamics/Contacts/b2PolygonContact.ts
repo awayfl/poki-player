@@ -48,8 +48,8 @@ export class b2PolygonContact extends b2Contact {
 	//~b2PolyContact() {}
 
 	// store temp manifold to reduce calls to new
-	private m0: b2Manifold = new b2Manifold();
-	private static readonly s_evalCP: b2ContactPoint = new b2ContactPoint();
+	public m0: b2Manifold = new b2Manifold();
+	public static readonly s_evalCP: b2ContactPoint = new b2ContactPoint();
 
 	public Evaluate(listener: b2ContactListener): void {
 		let v1: b2Vec2;
@@ -162,6 +162,6 @@ export class b2PolygonContact extends b2Contact {
 		return this.m_manifolds;
 	}
 
-	private m_manifolds: b2Manifold[] = [new b2Manifold()];
+	public m_manifolds: b2Manifold[] = [new b2Manifold()];
 	public m_manifold: b2Manifold;
 }

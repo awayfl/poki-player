@@ -30,6 +30,10 @@ import { b2ContactRegister } from './Contacts/b2ContactRegister';
 import { b2CircleContact } from './Contacts/b2CircleContact';
 import { b2PolyAndCircleContact } from './Contacts/b2PolyAndCircleContact';
 import { b2PolygonContact } from './Contacts/b2PolygonContact';
+import { b2ConcaveArcAndCircleContact } from './Contacts/b2ConcaveArcAndCircleContact';
+import { b2PolyAndConcaveArcContact } from './Contacts/b2PolyAndConcaveArcContact';
+import { b2StaticEdgeAndCircleContact } from './Contacts/b2StaticEdgeAndCircleContact';
+import { b2PolyAndStaticEdgeContact } from './Contacts/b2PolyAndStaticEdgeContact';
 
 // Delegate of b2World.
 export class b2ContactManager extends b2PairCallback {
@@ -292,5 +296,11 @@ export class b2ContactManager extends b2PairCallback {
 		b2Contact.AddType(b2CircleContact.Create, b2CircleContact.Destroy, b2Shape.e_circleShape, b2Shape.e_circleShape);
 		b2Contact.AddType(b2PolyAndCircleContact.Create, b2PolyAndCircleContact.Destroy, b2Shape.e_polygonShape, b2Shape.e_circleShape);
 		b2Contact.AddType(b2PolygonContact.Create, b2PolygonContact.Destroy, b2Shape.e_polygonShape, b2Shape.e_polygonShape);
+				
+		b2Contact.AddType(b2ConcaveArcAndCircleContact.Create, b2ConcaveArcAndCircleContact.Destroy, b2Shape.e_concaveArcShape, b2Shape.e_circleShape);
+		b2Contact.AddType(b2PolyAndConcaveArcContact.Create, b2PolyAndConcaveArcContact.Destroy, b2Shape.e_polygonShape, b2Shape.e_concaveArcShape);
+		
+		b2Contact.AddType(b2StaticEdgeAndCircleContact.Create, b2StaticEdgeAndCircleContact.Destroy, b2Shape.e_staticEdgeShape, b2Shape.e_circleShape);
+		b2Contact.AddType(b2PolyAndStaticEdgeContact.Create, b2PolyAndStaticEdgeContact.Destroy, b2Shape.e_polygonShape, b2Shape.e_staticEdgeShape);
 	}
 }

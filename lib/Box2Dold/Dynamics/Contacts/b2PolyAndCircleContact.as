@@ -39,7 +39,7 @@ public class b2PolyAndCircleContact extends b2Contact{
 		
 		m_manifold = m_manifolds[0];
 		
-		b2Settings.b2Assert(m_shape1.m_type == b2Shape.e_polygonShape);
+		//b2Settings.b2Assert(m_shape1.m_type == b2Shape.e_polygonShape);//Commented out for inheritance reasons
 		b2Settings.b2Assert(m_shape2.m_type == b2Shape.e_circleShape);
 		m_manifold.pointCount = 0;
 		var point:b2ManifoldPoint = m_manifold.points[0];
@@ -49,7 +49,7 @@ public class b2PolyAndCircleContact extends b2Contact{
 	//~b2PolyAndCircleContact() {}
 
 	//
-	static private const s_evalCP:b2ContactPoint = new b2ContactPoint();
+	static public const s_evalCP:b2ContactPoint = new b2ContactPoint();
 	//
 	public override function Evaluate(listener:b2ContactListener): void{
 		var i:int;
@@ -173,9 +173,9 @@ public class b2PolyAndCircleContact extends b2Contact{
 		return m_manifolds;
 	}
 
-	private var m_manifolds:Array = [new b2Manifold()];
+	public var m_manifolds:Array = [new b2Manifold()];
 	public var m_manifold:b2Manifold;
-	private var m0:b2Manifold = new b2Manifold();
+	public var m0:b2Manifold = new b2Manifold();
 	
 }
 

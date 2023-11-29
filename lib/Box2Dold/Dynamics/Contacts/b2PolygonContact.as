@@ -47,8 +47,8 @@ public class b2PolygonContact extends b2Contact
 	//~b2PolyContact() {}
 
 	// store temp manifold to reduce calls to new
-	private var m0:b2Manifold = new b2Manifold();
-	static private const s_evalCP:b2ContactPoint = new b2ContactPoint();
+	public var m0:b2Manifold = new b2Manifold();
+	static public const s_evalCP:b2ContactPoint = new b2ContactPoint();
 	
 	public override function Evaluate(listener:b2ContactListener): void{
 		var v1:b2Vec2;
@@ -174,7 +174,7 @@ public class b2PolygonContact extends b2Contact
 		return m_manifolds;
 	}
 
-	private var m_manifolds:Array = [new b2Manifold()];
+	public var m_manifolds:Array = [new b2Manifold()];
 	public var m_manifold:b2Manifold;
 };
 
