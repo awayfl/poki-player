@@ -1,6 +1,6 @@
 {
 	"name": "@awayfl/poki-player",
-	"version": "0.1.10",
+	"version": "0.1.11",
 	"description": "AVM Player for poki games",
 	"main": "bundle/poki-player.umd.js",
 	"module": "dist/index.js",
