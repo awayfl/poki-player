@@ -28,6 +28,7 @@ module.exports = {
 	// default config for this game - can be overwritten for every file-config:
 	//-------------------------------------------------------------------------
 
+	rt_backgroundColor: "#FFFFFF", // background color for the page
 	rt_debug: true, 	//	disable JS blobind - always false in prod
 	rt_title: "Main", 		//	title of game - should be overwritten for each file-config, but also available for index
 	rt_filename: "",	//	filename of game - no extension - must be set for each config

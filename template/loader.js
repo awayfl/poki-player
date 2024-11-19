@@ -429,10 +429,15 @@ var Loader = (function () {
 
 		__config = config;
 
+		const body = document.body;
 		const splash = document.querySelector("#splash__image");
 		const loading = document.querySelector("#loading__image");
 		const pr__root = document.querySelector("#progress__root");
 		const pr__line = document.querySelector("#progress__line");
+
+		Object.assign(body.style, {
+			backgroundColor: `${config.backgroundColor}`,
+		});
 
 		__splash = splash;
 		__loading = loading;
